@@ -53,4 +53,15 @@ public class Pet extends Auditable {
 
     @Column(name = "is_neutered", nullable = false)
     private boolean neutered;
+
+    @Column(name = "photo_url")
+    private String photoUrl;
+
+    @Column(name = "photo_public_id")
+    private String photoPublicId;
+
+    public void updatePhoto(String photoUrl, String photoPublicId) {
+        this.photoUrl = photoUrl;
+        this.photoPublicId = photoPublicId;
+    }
 }
