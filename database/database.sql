@@ -61,6 +61,8 @@ CREATE TABLE pet (
     pet_id INT IDENTITY(1,1) PRIMARY KEY,
     owner_id INT NOT NULL,
     name NVARCHAR(100) NOT NULL,
+    photo_url NVARCHAR(500) NULL,
+    photo_public_id NVARCHAR(255) NULL,
     species NVARCHAR(50) NOT NULL,
     breed NVARCHAR(50) NULL, --raza
     birth_date DATE NULL,
