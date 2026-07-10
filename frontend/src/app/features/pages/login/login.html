@@ -1,58 +1,64 @@
 <div
   class="min-h-screen flex flex-col items-center justify-center px-6 py-10 bg-gradient-to-b from-sky-100 via-emerald-50 to-amber-50 gap-8"
 >
-  <div class="avatar avatar-placeholder">
-    <div
-      class="bg-primary/10 text-primary border-2 border-primary/30 rounded-full w-28 sm:w-36 md:w-40"
-    >
-      <ng-icon name="heroUserCircle" class="text-6xl sm:text-7xl" />
+  <div class="card w-full max-w-md bg-base-200 shadow-2xl border border-primary/10">
+    <div class="card-body gap-6">
+      <div class="flex justify-center">
+        <div
+          class="rounded-full w-32 h-32 overflow-hidden bg-primary/10 border-4 border-primary/20 flex items-center justify-center"
+        >
+          <img src="/assets/icons/logo.png" alt="Logo" class="w-full h-full object-contain p-3" />
+        </div>
+      </div>
+      <h1 class="text-2xl font-bold text-center text-neutral">Iniciar sesión</h1>
+      <form
+        [formGroup]="form"
+        (ngSubmit)="onSubmit()"
+        class="w-full max-w-sm md:max-w-md flex flex-col gap-4"
+      >
+        <label class="form-control w-full">
+          <span class="label-text text-base-content/70 mb-1">Usuario</span>
+          <input
+            type="text"
+            placeholder="Tu nombre de usuario"
+            formControlName="username"
+            class="input input-bordered w-full rounded-2xl bg-base-100 mt-2"
+          />
+        </label>
+
+        <label class="form-control w-full">
+          <span class="label-text text-base-content/70 mb-1">Contraseña</span>
+          <label
+            class="input input-bordered w-full rounded-2xl bg-base-100 flex items-center gap-2 mt-2"
+          >
+            <input
+              [type]="showPassword() ? 'text' : 'password'"
+              placeholder="••••••••"
+              formControlName="password"
+              class="grow w-full"
+            />
+            <button type="button" (click)="togglePasswordVisibility()" class="text-base-content/40">
+              <ng-icon [name]="showPassword() ? 'heroXMark' : 'heroEye'" />
+            </button>
+          </label>
+        </label>
+
+        @if (errorMessage()) {
+          <p class="text-error text-sm text-center">{{ errorMessage() }}</p>
+        }
+
+        <button
+          type="submit"
+          class="btn btn-primary rounded-full mt-2"
+          [class.btn-disabled]="isLoading()"
+        >
+          @if (isLoading()) {
+            <span class="loading loading-spinner loading-sm"></span>
+          } @else {
+            Entrar
+          }
+        </button>
+      </form>
     </div>
   </div>
-
-  <form
-    [formGroup]="form"
-    (ngSubmit)="onSubmit()"
-    class="w-full max-w-sm md:max-w-md flex flex-col gap-4"
-  >
-    <label class="form-control w-full">
-      <span class="label-text text-base-content/70 mb-1">Usuario</span>
-      <input
-        type="text"
-        placeholder="Tu nombre de usuario"
-        formControlName="username"
-        class="input input-bordered w-full rounded-2xl bg-base-100"
-      />
-    </label>
-
-    <label class="form-control w-full">
-      <span class="label-text text-base-content/70 mb-1">Contraseña</span>
-      <label class="input input-bordered rounded-2xl bg-base-100 flex items-center gap-2">
-        <input
-          [type]="showPassword() ? 'text' : 'password'"
-          placeholder="••••••••"
-          formControlName="password"
-          class="grow"
-        />
-        <button type="button" (click)="togglePasswordVisibility()" class="text-base-content/40">
-          <ng-icon [name]="showPassword() ? 'heroXMark' : 'heroEye'" />
-        </button>
-      </label>
-    </label>
-
-    @if (errorMessage()) {
-      <p class="text-error text-sm text-center">{{ errorMessage() }}</p>
-    }
-
-    <button
-      type="submit"
-      class="btn btn-primary rounded-full mt-2"
-      [class.btn-disabled]="isLoading()"
-    >
-      @if (isLoading()) {
-        <span class="loading loading-spinner loading-sm"></span>
-      } @else {
-        Entrar
-      }
-    </button>
-  </form>
 </div>

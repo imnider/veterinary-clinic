@@ -1,18 +1,32 @@
-/* You can add global styles to this file, and also import other style files */
-
 @import 'tailwindcss';
-@plugin "daisyui" {
-  themes: cupcake;
-}
-/* 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
-html {
-  @apply font-sans;
+@plugin "daisyui";
+
+@plugin "daisyui/theme" {
+  name: 'ghibli';
+  default: true;
+  prefersdark: false;
+  color-scheme: light;
+
+  --color-base-100: #fdfbf5;
+  --color-base-200: #ffffff;
+  --color-base-300: #e6dcc3;
+
+  --color-primary: #5b8c5a;
+  --color-secondary: #7fa9c9;
+  --color-accent: #e0b384;
+  --color-neutral: #4a4238;
+
+  --color-info: #7fa9c9;
+  --color-success: #5b8c5a;
+  --color-warning: #e0b384;
+  --color-error: #c96a5a;
 }
 
-body {
-  background-color: #fdfbf5;
-} */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
