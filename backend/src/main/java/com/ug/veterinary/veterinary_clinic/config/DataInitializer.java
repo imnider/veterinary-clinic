@@ -6,6 +6,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import com.ug.veterinary.veterinary_clinic.constants.MessageConstants;
 import com.ug.veterinary.veterinary_clinic.entities.AppUser;
 import com.ug.veterinary.veterinary_clinic.entities.Role;
 import com.ug.veterinary.veterinary_clinic.enums.RoleEnum;
@@ -28,14 +29,12 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) {
         if (appUserRepository.findByUsername(adminProperties.username()).isPresent()) {
-            log.info("El usuario administrador ya existe, se omite la creacion.");
+            log.info(MessageConstants.ADMIN_ALREADY_EXISTS);
             return;
         }
 
         Role adminRole = roleRepository.findByName(RoleEnum.ADMIN)
-                .orElseThrow(() -> new IllegalStateException(
-                        "El rol ADMIN no existe en la base de datos. Verifica los inserts del script SQL."
-                ));
+                .orElseThrow(() -> new IllegalStateException(MessageConstants.ADMIN_ROLE_NOT_FOUND));
 
         AppUser admin = AppUser.builder()
                 .name(adminProperties.name())
@@ -46,6 +45,6 @@ public class DataInitializer implements CommandLineRunner {
                 .build();
 
         appUserRepository.save(admin);
-        log.info("Usuario administrador creado: {}", adminProperties.username());
+        log.info(MessageConstants.ADMIN_CREATED);
     }
 }

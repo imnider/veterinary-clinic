@@ -16,4 +16,8 @@ public final class MessageConstants {
     public static final String PET_OWNER_NOT_FOUND = "El propietario especificado no existe";
     public static final String PET_OWNER_INVALID_ROLE = "El usuario especificado no tiene rol de cliente";
     public static final String PET_OWNER_ID_REQUIRED = "Debes especificar el propietario de la mascota";
+
+    public static final String ADMIN_ALREADY_EXISTS = "El usuario administrador ya existe, se omite la creacion";
+    public static final String ADMIN_ROLE_NOT_FOUND = "El rol ADMIN no existe en la base de datos. Verifica los inserts del script SQL";
+    public static final String ADMIN_CREATED = "Usuario administrador creado exitosamente";
 }
