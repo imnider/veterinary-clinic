@@ -10,7 +10,8 @@ import java.util.stream.Collectors;
 public enum RoleEnum {
 
     CLIENTE(Set.of(
-            Permission.PET_READ,
+            Permission.PET_CREATE,
+            Permission.PET_READ_OWN,
             Permission.APPOINTMENT_CREATE,
             Permission.APPOINTMENT_READ,
             Permission.MEDICAL_RECORD_READ,
@@ -18,7 +19,6 @@ public enum RoleEnum {
     )),
 
     VETERINARIO(Set.of(
-            Permission.PET_CREATE,
             Permission.PET_READ,
             Permission.APPOINTMENT_READ_ALL,
             Permission.APPOINTMENT_UPDATE,
@@ -55,7 +55,9 @@ public enum RoleEnum {
     public enum Permission {
         // Pet
         PET_CREATE,
+        PET_READ_OWN,
         PET_READ,
+        PET_READ_ALL,
         PET_UPDATE,
         PET_DELETE,
 
@@ -69,6 +71,7 @@ public enum RoleEnum {
         // Medical record
         MEDICAL_RECORD_CREATE,
         MEDICAL_RECORD_READ,
+        MEDICAL_RECORD_READ_ALL,
         MEDICAL_RECORD_UPDATE,
         MEDICAL_RECORD_DELETE,
 

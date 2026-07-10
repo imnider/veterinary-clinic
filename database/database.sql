@@ -143,7 +143,7 @@ GO
 CREATE TABLE medical_record (
     medical_record_id INT IDENTITY(1,1) PRIMARY KEY,
     pet_id INT NOT NULL,
-    appointment_id INT NULL,
+    appointment_id INT NOT NULL UNIQUE,
     veterinarian_id INT NOT NULL,
     record_date DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
     diagnosis NVARCHAR(500) NOT NULL,
