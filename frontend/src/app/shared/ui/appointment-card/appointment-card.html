@@ -1,0 +1,17 @@
+<article class="card bg-base-100 rounded-2xl shadow-sm border border-base-200">
+  <div class="card-body flex-row items-center justify-between py-3 px-4">
+    <div>
+      <p class="font-medium text-base-content">{{ appointment.petName }}</p>
+      <p class="text-sm text-base-content/60">{{ appointment.reason }}</p>
+    </div>
+    <div class="text-right">
+      <p class="text-sm font-medium text-secondary">
+        {{ appointment.appointmentDate | date: 'mediumDate' }}
+      </p>
+
+      <p class="text-xs text-base-content/50">
+        {{ appointment.appointmentDate | date: 'shortTime' }}
+      </p>
+    </div>
+  </div>
+</article>

@@ -1,0 +1,22 @@
+<section class="px-5 pt-2 flex flex-col gap-5">
+  <label class="input input-bordered rounded-full flex items-center gap-2 bg-base-100 max-w-md">
+    <ng-icon name="heroMagnifyingGlass" class="text-base-content/40" />
+    <input type="search" class="grow" placeholder="Buscar" />
+  </label>
+
+  <div
+    class="w-full h-40 rounded-3xl bg-gradient-to-r from-emerald-200 to-sky-200 flex items-center justify-center overflow-hidden"
+  >
+    <span class="text-base-content/50 text-sm">Banner / carrusel</span>
+  </div>
+
+  <div class="flex flex-col gap-3">
+    <h2 class="font-semibold text-base-content/80">Citas próximas</h2>
+
+    @for (appointment of upcomingAppointments(); track appointment.appointmentDate) {
+      <app-appointment-card [appointment]="appointment" />
+    } @empty {
+      <p class="text-sm text-base-content/50">No tienes citas próximas.</p>
+    }
+  </div>
+</section>

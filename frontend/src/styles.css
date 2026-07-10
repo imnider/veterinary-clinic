@@ -4,7 +4,15 @@
 @plugin "daisyui" {
   themes: cupcake;
 }
+/* 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  @apply font-sans;
+}
 
 body {
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-}
+  background-color: #fdfbf5;
+} */

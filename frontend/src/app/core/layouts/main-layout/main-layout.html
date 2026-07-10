@@ -1,0 +1,7 @@
+<div class="min-h-screen flex flex-col bg-base-200 md:pl-20">
+  <app-topbar />
+  <main class="flex-1 overflow-y-auto pb-4 max-w-2xl w-full mx-auto">
+    <router-outlet />
+  </main>
+  <app-bottom-nav [items]="navItems()" />
+</div>
