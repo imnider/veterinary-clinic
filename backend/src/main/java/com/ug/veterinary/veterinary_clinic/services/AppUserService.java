@@ -15,6 +15,7 @@ import com.ug.veterinary.veterinary_clinic.exceptions.InvalidOperationException;
 import com.ug.veterinary.veterinary_clinic.exceptions.ResourceNotFoundException;
 import com.ug.veterinary.veterinary_clinic.repositories.AppUserRepository;
 import com.ug.veterinary.veterinary_clinic.repositories.RoleRepository;
+import com.ug.veterinary.veterinary_clinic.security.SecurityUtils;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -52,6 +53,11 @@ public class AppUserService {
 
         AppUser savedUser = appUserRepository.save(user);
         return UserResponse.from(savedUser);
+    }
+
+    public UserResponse getCurrentUserProfile() {
+        AppUser currentUser = SecurityUtils.getCurrentUser().getAppUser();
+        return UserResponse.from(currentUser);
     }
 
     private Set<Role> resolveRoles(Set<RoleEnum> roleEnums) {

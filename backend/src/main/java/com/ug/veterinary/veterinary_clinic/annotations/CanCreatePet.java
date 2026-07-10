@@ -9,5 +9,5 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-@PreAuthorize("hasAuthority('PET_WRITE')")
+@PreAuthorize("hasAuthority('PET_CREATE')")
 public @interface CanCreatePet {}

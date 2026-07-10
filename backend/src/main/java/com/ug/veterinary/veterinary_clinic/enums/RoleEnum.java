@@ -11,20 +11,23 @@ public enum RoleEnum {
 
     CLIENTE(Set.of(
             Permission.PET_READ,
+            Permission.APPOINTMENT_CREATE,
             Permission.APPOINTMENT_READ,
-            Permission.APPOINTMENT_WRITE,
             Permission.MEDICAL_RECORD_READ,
             Permission.VACCINATION_READ
     )),
 
     VETERINARIO(Set.of(
+            Permission.PET_CREATE,
             Permission.PET_READ,
             Permission.APPOINTMENT_READ_ALL,
-            Permission.APPOINTMENT_WRITE,
+            Permission.APPOINTMENT_UPDATE,
+            Permission.MEDICAL_RECORD_CREATE,
             Permission.MEDICAL_RECORD_READ,
-            Permission.MEDICAL_RECORD_WRITE,
+            Permission.MEDICAL_RECORD_UPDATE,
+            Permission.VACCINATION_CREATE,
             Permission.VACCINATION_READ,
-            Permission.VACCINATION_WRITE
+            Permission.VACCINATION_UPDATE
     )),
 
     ADMIN(Set.of(Permission.values()));
@@ -50,16 +53,53 @@ public enum RoleEnum {
     }
 
     public enum Permission {
+        // Pet
+        PET_CREATE,
         PET_READ,
-        PET_WRITE,
+        PET_UPDATE,
+        PET_DELETE,
+
+        // Appointment
+        APPOINTMENT_CREATE,
         APPOINTMENT_READ,
         APPOINTMENT_READ_ALL,
-        APPOINTMENT_WRITE,
+        APPOINTMENT_UPDATE,
+        APPOINTMENT_DELETE,
+
+        // Medical record
+        MEDICAL_RECORD_CREATE,
         MEDICAL_RECORD_READ,
-        MEDICAL_RECORD_WRITE,
+        MEDICAL_RECORD_UPDATE,
+        MEDICAL_RECORD_DELETE,
+
+        // Vaccination record
+        VACCINATION_CREATE,
         VACCINATION_READ,
-        VACCINATION_WRITE,
-        CATALOG_MANAGE,
-        USER_MANAGE
+        VACCINATION_UPDATE,
+        VACCINATION_DELETE,
+
+        // Service (catalog)
+        SERVICE_CREATE,
+        SERVICE_READ,
+        SERVICE_UPDATE,
+        SERVICE_DELETE,
+
+        // Treatment (catalog)
+        TREATMENT_CREATE,
+        TREATMENT_READ,
+        TREATMENT_UPDATE,
+        TREATMENT_DELETE,
+
+        // Vaccine (catalog)
+        VACCINE_CREATE,
+        VACCINE_READ,
+        VACCINE_UPDATE,
+        VACCINE_DELETE,
+
+        // User
+        USER_CREATE,
+        USER_READ,
+        USER_UPDATE,
+        USER_DELETE
     }
 }
