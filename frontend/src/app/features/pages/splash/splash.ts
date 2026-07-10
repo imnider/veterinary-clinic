@@ -15,6 +15,6 @@ export class Splash implements OnInit {
     setTimeout(() => {
       const destination = this.authService.isAuthenticated() ? '/home' : '/login';
       this.router.navigate([destination]);
-    }, 1800);
+    }, 3600);
   }
 }

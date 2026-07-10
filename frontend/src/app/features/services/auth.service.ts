@@ -7,6 +7,7 @@ import { environment } from '../../../environment/environment';
 import { AuthUser } from '../interfaces/entities/auth-user.interface';
 import { AuthResponse, LoginRequest } from '../interfaces/models/login.interface';
 import { ApiResponse } from '../interfaces/models/api-response.interface';
+import { Role } from '../../shared/enums/role.enum';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -59,5 +60,17 @@ export class AuthService {
       roles: payload.roles,
       permissions: payload.permissions,
     };
+  }
+
+  hasRole(role: Role): boolean {
+    return this.currentUser()?.roles.includes(role) ?? false;
+  }
+
+  hasAnyRole(roles: Role[]): boolean {
+    return roles.some((role) => this.hasRole(role));
+  }
+
+  hasPermission(permission: string): boolean {
+    return this.currentUser()?.permissions.includes(permission) ?? false;
   }
 }
