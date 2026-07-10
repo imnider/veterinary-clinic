@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 import { JwtPayload } from '../interfaces/models/jwt-payload.interface';
 
-const TOKEN_KEY = 'vetclinic_token'; //camelCase constant, key en localStorage
+const TOKEN_KEY = 'vetclinic_token';
 
 @Injectable({ providedIn: 'root' })
 export class TokenService {
