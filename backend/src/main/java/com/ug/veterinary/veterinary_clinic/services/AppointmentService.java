@@ -1,6 +1,10 @@
 package com.ug.veterinary.veterinary_clinic.services;
 
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,6 +50,50 @@ public class AppointmentService {
         return AppointmentResponse.from(savedAppointment);
     }
 
+    @Transactional(readOnly = true)
+    public List<AppointmentResponse> getAppointments(boolean pendingOnly) {
+        AppUser currentUser = SecurityUtils.getCurrentUser().getAppUser();
+        List<Appointment> appointments;
+
+        if (currentUser.getRoles().stream().anyMatch(r -> r.getName() == RoleEnum.ADMIN)) {
+            appointments = pendingOnly
+                    ? appointmentRepository.findByStatus(AppointmentConstants.STATUS_SCHEDULED)
+                    : appointmentRepository.findAll();
+
+        } else if (currentUser.getRoles().stream().anyMatch(r -> r.getName() == RoleEnum.VETERINARIO)) {
+            appointments = pendingOnly
+                    ? appointmentRepository.findByVeterinarianIdAndStatus(
+                            currentUser.getId(),
+                            AppointmentConstants.STATUS_SCHEDULED)
+                    : appointmentRepository.findByVeterinarianId(currentUser.getId());
+        } else {
+            appointments = pendingOnly
+                    ? appointmentRepository.findByPetOwnerIdAndStatus(
+                            currentUser.getId(),
+                            AppointmentConstants.STATUS_SCHEDULED)
+                    : appointmentRepository.findByPetOwnerId(currentUser.getId());
+        }
+
+        return appointments.stream()
+                .map(AppointmentResponse::from)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<AppointmentResponse> getAppointmentsByPet(Integer petId, boolean pendingOnly) {
+        Pet pet = petRepository.findById(petId)
+                .orElseThrow(() -> new ResourceNotFoundException(MessageConstants.PET_NOT_FOUND));
+        validatePetAccess(pet);
+        List<Appointment> appointments = pendingOnly
+                ? appointmentRepository.findByPetIdAndStatus(
+                        petId,
+                        AppointmentConstants.STATUS_SCHEDULED)
+                : appointmentRepository.findByPetId(petId);
+        return appointments.stream()
+                .map(AppointmentResponse::from)
+                .toList();
+    }
+
     private Pet resolvePet(Integer petId) {
         Pet pet = petRepository.findById(petId)
                 .orElseThrow(() -> new ResourceNotFoundException(MessageConstants.PET_NOT_FOUND));
@@ -64,14 +112,19 @@ public class AppointmentService {
     private AppUser resolveVeterinarian(Integer veterinarianId) {
         AppUser veterinarian = appUserRepository.findById(veterinarianId)
                 .orElseThrow(() -> new ResourceNotFoundException(MessageConstants.VETERINARIAN_NOT_FOUND));
-
-        boolean isVeterinarian = veterinarian.getRoles().stream()
-                .anyMatch(role -> role.getName() == RoleEnum.VETERINARIO);
-
-        if (!isVeterinarian) {
-            throw new InvalidOperationException(MessageConstants.VETERINARIAN_INVALID_ROLE);
-        }
-
+        boolean isVeterinarian = veterinarian.getRoles().stream().anyMatch(role -> role.getName() == RoleEnum.VETERINARIO);
+        if (!isVeterinarian) throw new InvalidOperationException(MessageConstants.VETERINARIAN_INVALID_ROLE);
         return veterinarian;
+    }
+
+    private void validatePetAccess(Pet pet) {
+        AppUser currentUser = SecurityUtils.getCurrentUser().getAppUser();
+        boolean isClient = currentUser.getRoles().stream()
+                .anyMatch(role -> role.getName() == RoleEnum.CLIENTE);
+        
+        if (!isClient) return;
+
+        if (!pet.getOwner().getId().equals(currentUser.getId()))
+            throw new AccessDeniedException(MessageConstants.ACCESS_DENIED);   
     }
 }

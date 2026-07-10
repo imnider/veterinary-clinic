@@ -11,7 +11,7 @@ public enum RoleEnum {
 
     CLIENTE(Set.of(
             Permission.PET_CREATE,
-            Permission.PET_READ_OWN,
+            Permission.PET_READ,
             Permission.APPOINTMENT_CREATE,
             Permission.APPOINTMENT_READ,
             Permission.MEDICAL_RECORD_READ,
@@ -55,7 +55,6 @@ public enum RoleEnum {
     public enum Permission {
         // Pet
         PET_CREATE,
-        PET_READ_OWN,
         PET_READ,
         PET_READ_ALL,
         PET_UPDATE,

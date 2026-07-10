@@ -9,5 +9,5 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-@PreAuthorize("hasAuthority('PET_READ')")
-public @interface CanReadClientPets {}
+@PreAuthorize("hasAuthority('APPOINTMENT_READ')")
+public @interface CanReadAppointment {}
