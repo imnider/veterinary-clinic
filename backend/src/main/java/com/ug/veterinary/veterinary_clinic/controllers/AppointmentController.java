@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ug.veterinary.veterinary_clinic.annotations.CanCreateAppointment;
 import com.ug.veterinary.veterinary_clinic.annotations.CanReadAppointment;
+import com.ug.veterinary.veterinary_clinic.annotations.CanUpdateAppointment;
 import com.ug.veterinary.veterinary_clinic.dto.request.CreateAppointmentRequest;
+import com.ug.veterinary.veterinary_clinic.dto.request.UpdateAppointmentStatusRequest;
 import com.ug.veterinary.veterinary_clinic.dto.response.ApiResponse;
 import com.ug.veterinary.veterinary_clinic.dto.response.AppointmentResponse;
 import com.ug.veterinary.veterinary_clinic.services.AppointmentService;
@@ -69,6 +72,19 @@ public class AppointmentController {
         return ResponseEntity.ok(
                 ApiResponse.success(
                         appointmentService.getAppointmentsByPet(petId, false)
+                )
+        );
+    }
+
+    @CanUpdateAppointment
+    @PatchMapping("/{appointmentId}/status")
+    public ResponseEntity<ApiResponse<AppointmentResponse>> updateAppointmentStatus(
+            @PathVariable Integer appointmentId,
+            @Valid @RequestBody UpdateAppointmentStatusRequest request
+    ) {
+        return ResponseEntity.ok(
+                ApiResponse.success(
+                        appointmentService.updateAppointmentStatus(appointmentId, request)
                 )
         );
     }

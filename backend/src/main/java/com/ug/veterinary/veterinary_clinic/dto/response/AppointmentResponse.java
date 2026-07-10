@@ -3,6 +3,8 @@ package com.ug.veterinary.veterinary_clinic.dto.response;
 import java.time.LocalDateTime;
 
 import com.ug.veterinary.veterinary_clinic.entities.Appointment;
+import com.ug.veterinary.veterinary_clinic.enums.AppointmentStatusEnum;
+import com.ug.veterinary.veterinary_clinic.enums.AppointmentTypeEnum;
 
 public record AppointmentResponse(
         Integer id,
@@ -12,8 +14,8 @@ public record AppointmentResponse(
         String veterinarianName,
         LocalDateTime appointmentDate,
         String reason,
-        String appointmentType,
-        String status
+        AppointmentTypeEnum appointmentType,
+        AppointmentStatusEnum status
 ) {
     public static AppointmentResponse from(Appointment appointment) {
         return new AppointmentResponse(

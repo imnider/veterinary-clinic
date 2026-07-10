@@ -54,6 +54,7 @@ public final class ValidationConstants {
     public static final String APPOINTMENT_TYPE_REQUIRED = "Debe especificar el tipo de cita";
     public static final String APPOINTMENT_TYPE_INVALID = "El tipo de cita debe ser Medical o Service";
     public static final String APPOINTMENT_REASON_MAX_MESSAGE = "El motivo no puede superar los " + APPOINTMENT_REASON_MAX + " caracteres";
+    public static final String APPOINTMENT_STATUS_REQUIRED = "El estado de la cita es obligatorio";
 
     // ── Mensajes: medical record ────────────────────────────────────
     public static final String MEDICAL_RECORD_APPOINTMENT_REQUIRED = "La cita es obligatoria";

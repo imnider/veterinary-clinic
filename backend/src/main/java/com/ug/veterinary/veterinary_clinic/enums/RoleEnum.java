@@ -14,12 +14,14 @@ public enum RoleEnum {
             Permission.PET_READ,
             Permission.APPOINTMENT_CREATE,
             Permission.APPOINTMENT_READ,
+            Permission.APPOINTMENT_UPDATE,
             Permission.MEDICAL_RECORD_READ,
             Permission.VACCINATION_READ
     )),
 
     VETERINARIO(Set.of(
             Permission.PET_READ,
+            Permission.APPOINTMENT_READ,
             Permission.APPOINTMENT_READ_ALL,
             Permission.APPOINTMENT_UPDATE,
             Permission.MEDICAL_RECORD_CREATE,

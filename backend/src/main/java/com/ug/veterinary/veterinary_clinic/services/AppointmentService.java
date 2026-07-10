@@ -8,13 +8,14 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ug.veterinary.veterinary_clinic.constants.AppointmentConstants;
 import com.ug.veterinary.veterinary_clinic.constants.MessageConstants;
 import com.ug.veterinary.veterinary_clinic.dto.request.CreateAppointmentRequest;
+import com.ug.veterinary.veterinary_clinic.dto.request.UpdateAppointmentStatusRequest;
 import com.ug.veterinary.veterinary_clinic.dto.response.AppointmentResponse;
 import com.ug.veterinary.veterinary_clinic.entities.AppUser;
 import com.ug.veterinary.veterinary_clinic.entities.Appointment;
 import com.ug.veterinary.veterinary_clinic.entities.Pet;
+import com.ug.veterinary.veterinary_clinic.enums.AppointmentStatusEnum;
 import com.ug.veterinary.veterinary_clinic.enums.RoleEnum;
 import com.ug.veterinary.veterinary_clinic.exceptions.InvalidOperationException;
 import com.ug.veterinary.veterinary_clinic.exceptions.ResourceNotFoundException;
@@ -43,7 +44,7 @@ public class AppointmentService {
                 .appointmentDate(request.appointmentDate())
                 .reason(request.reason())
                 .appointmentType(request.appointmentType())
-                .status(AppointmentConstants.STATUS_SCHEDULED)
+                .status(AppointmentStatusEnum.SCHEDULED)
                 .build();
 
         Appointment savedAppointment = appointmentRepository.save(appointment);
@@ -57,20 +58,20 @@ public class AppointmentService {
 
         if (currentUser.getRoles().stream().anyMatch(r -> r.getName() == RoleEnum.ADMIN)) {
             appointments = pendingOnly
-                    ? appointmentRepository.findByStatus(AppointmentConstants.STATUS_SCHEDULED)
+                    ? appointmentRepository.findByStatus(AppointmentStatusEnum.SCHEDULED)
                     : appointmentRepository.findAll();
 
         } else if (currentUser.getRoles().stream().anyMatch(r -> r.getName() == RoleEnum.VETERINARIO)) {
             appointments = pendingOnly
                     ? appointmentRepository.findByVeterinarianIdAndStatus(
                             currentUser.getId(),
-                            AppointmentConstants.STATUS_SCHEDULED)
+                            AppointmentStatusEnum.SCHEDULED)
                     : appointmentRepository.findByVeterinarianId(currentUser.getId());
         } else {
             appointments = pendingOnly
                     ? appointmentRepository.findByPetOwnerIdAndStatus(
                             currentUser.getId(),
-                            AppointmentConstants.STATUS_SCHEDULED)
+                            AppointmentStatusEnum.SCHEDULED)
                     : appointmentRepository.findByPetOwnerId(currentUser.getId());
         }
 
@@ -87,11 +88,20 @@ public class AppointmentService {
         List<Appointment> appointments = pendingOnly
                 ? appointmentRepository.findByPetIdAndStatus(
                         petId,
-                        AppointmentConstants.STATUS_SCHEDULED)
+                        AppointmentStatusEnum.SCHEDULED)
                 : appointmentRepository.findByPetId(petId);
         return appointments.stream()
                 .map(AppointmentResponse::from)
                 .toList();
+    }
+
+    @Transactional
+    public AppointmentResponse updateAppointmentStatus(Integer appointmentId,UpdateAppointmentStatusRequest request) {
+        Appointment appointment = appointmentRepository.findById(appointmentId)
+        .orElseThrow(() -> new ResourceNotFoundException(MessageConstants.APPOINTMENT_NOT_FOUND));
+                validateAppointmentStatusUpdate(appointment, request.status());
+        appointment.setStatus(request.status());
+        return AppointmentResponse.from(appointmentRepository.save(appointment));
     }
 
     private Pet resolvePet(Integer petId) {
@@ -126,5 +136,39 @@ public class AppointmentService {
 
         if (!pet.getOwner().getId().equals(currentUser.getId()))
             throw new AccessDeniedException(MessageConstants.ACCESS_DENIED);   
+    }
+
+    private void validateAppointmentStatusUpdate(Appointment appointment, AppointmentStatusEnum newStatus) {
+        AppUser currentUser = SecurityUtils.getCurrentUser().getAppUser();
+        boolean isAdmin = currentUser.getRoles().stream()
+                .anyMatch(role -> role.getName() == RoleEnum.ADMIN);
+        boolean isVeterinarian = currentUser.getRoles().stream()
+                .anyMatch(role -> role.getName() == RoleEnum.VETERINARIO);
+        boolean isClient = currentUser.getRoles().stream()
+                .anyMatch(role -> role.getName() == RoleEnum.CLIENTE);
+
+        if (appointment.getStatus() != AppointmentStatusEnum.SCHEDULED) {
+                throw new InvalidOperationException(MessageConstants.APPOINTMENT_STATUS_CANNOT_BE_UPDATED);
+        }
+
+        if (isClient) {
+                validatePetAccess(appointment.getPet());
+                if (newStatus != AppointmentStatusEnum.CANCELLED)
+                        throw new AccessDeniedException(MessageConstants.ACCESS_DENIED);
+                return;
+        }
+
+        if (isVeterinarian) {
+                if (!appointment.getVeterinarian().getId().equals(currentUser.getId()))
+                        throw new AccessDeniedException(MessageConstants.ACCESS_DENIED);
+        
+                if (newStatus != AppointmentStatusEnum.COMPLETED) 
+                        throw new AccessDeniedException(MessageConstants.ACCESS_DENIED);
+                return;
+        }
+
+        if (isAdmin) return;
+        
+        throw new AccessDeniedException(MessageConstants.ACCESS_DENIED);
     }
 }
