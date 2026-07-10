@@ -1,0 +1,66 @@
+<section class="px-5 pt-6 pb-10 flex flex-col gap-6 max-w-md mx-auto">
+  <h1 class="text-xl font-semibold text-base-content">Agendar cita</h1>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+    <label class="form-control">
+      <span class="label-text text-base-content/70 mb-1">Mascota</span>
+      <select formControlName="petId" class="select select-bordered rounded-full w-full">
+        <option [ngValue]="null" disabled selected>Selecciona tu mascota</option>
+        @for (pet of myPets(); track pet.id) {
+          <option [ngValue]="pet.id">{{ pet.name }}</option>
+        }
+      </select>
+    </label>
+
+    <label class="form-control">
+      <span class="label-text text-base-content/70 mb-1">Veterinario</span>
+      <select formControlName="veterinarianId" class="select select-bordered rounded-full w-full">
+        <option [ngValue]="null" disabled selected>Selecciona un veterinario</option>
+        @for (vet of veterinarians(); track vet.id) {
+          <option [ngValue]="vet.id">{{ vet.firstName }} {{ vet.lastName }}</option>
+        }
+      </select>
+    </label>
+
+    <label class="form-control">
+      <span class="label-text text-base-content/70 mb-1">Fecha y hora</span>
+      <input
+        formControlName="appointmentDate"
+        type="datetime-local"
+        class="input input-bordered rounded-full w-full"
+      />
+    </label>
+
+    <label class="form-control">
+      <span class="label-text text-base-content/70 mb-1">Tipo de cita</span>
+      <select formControlName="appointmentType" class="select select-bordered rounded-full w-full">
+        <option value="" disabled selected>Selecciona un tipo</option>
+        <option value="CONSULTA">Consulta general</option>
+        <option value="VACUNACION">Vacunación</option>
+        <option value="CIRUGIA">Cirugía</option>
+        <option value="EMERGENCIA">Emergencia</option>
+      </select>
+    </label>
+
+    <label class="form-control">
+      <span class="label-text text-base-content/70 mb-1">Motivo</span>
+      <textarea
+        formControlName="reason"
+        rows="3"
+        placeholder="Describe brevemente el motivo"
+        class="textarea textarea-bordered rounded-2xl w-full"
+      ></textarea>
+    </label>
+
+    @if (errorMessage()) {
+      <div class="alert alert-error rounded-2xl text-sm">{{ errorMessage() }}</div>
+    }
+
+    <button type="submit" class="btn btn-primary rounded-full mt-2" [disabled]="isSubmitting()">
+      @if (isSubmitting()) {
+        <span class="loading loading-spinner loading-sm"></span>
+      }
+      Confirmar cita
+    </button>
+  </form>
+</section>
