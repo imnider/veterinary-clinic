@@ -28,6 +28,11 @@ export const routes: Routes = [
         path: 'home',
         loadComponent: () => import('./features/pages/home/home').then((m) => m.Home),
       },
+      {
+        path: 'pets',
+        loadComponent: () =>
+          import('./features/pages/pet/pet-list/pet-list').then((m) => m.PetListComponent),
+      },
     ],
   },
   {
