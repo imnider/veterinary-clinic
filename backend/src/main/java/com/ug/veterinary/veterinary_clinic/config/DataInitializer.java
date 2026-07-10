@@ -23,11 +23,11 @@ public class DataInitializer implements CommandLineRunner {
     private final AppUserRepository appUserRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
-    private final FirstUserProperties firstUserProperties;
+    private final AdminProperties adminProperties;
 
     @Override
     public void run(String... args) {
-        if (appUserRepository.findByUsername(firstUserProperties.username()).isPresent()) {
+        if (appUserRepository.findByUsername(adminProperties.username()).isPresent()) {
             log.info("El usuario administrador ya existe, se omite la creacion.");
             return;
         }
@@ -38,14 +38,14 @@ public class DataInitializer implements CommandLineRunner {
                 ));
 
         AppUser admin = AppUser.builder()
-                .name(firstUserProperties.name())
-                .username(firstUserProperties.username())
-                .email(firstUserProperties.email())
-                .passwordHash(passwordEncoder.encode(firstUserProperties.password()))
+                .name(adminProperties.name())
+                .username(adminProperties.username())
+                .email(adminProperties.email())
+                .passwordHash(passwordEncoder.encode(adminProperties.password()))
                 .roles(Set.of(adminRole))
                 .build();
 
         appUserRepository.save(admin);
-        log.info("Usuario administrador creado: {}", firstUserProperties.username());
+        log.info("Usuario administrador creado: {}", adminProperties.username());
     }
 }
