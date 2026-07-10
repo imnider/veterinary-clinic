@@ -26,4 +26,13 @@ public final class MessageConstants {
     public static final String ADMIN_ALREADY_EXISTS = "El usuario administrador ya existe, se omite la creacion";
     public static final String ADMIN_ROLE_NOT_FOUND = "El rol ADMIN no existe en la base de datos. Verifica los inserts del script SQL";
     public static final String ADMIN_CREATED = "Usuario administrador creado exitosamente";
+
+    public static final String PET_NOT_FOUND = "Mascota no encontrada";
+    public static final String VETERINARIAN_NOT_FOUND = "Veterinario no encontrado";
+    public static final String VETERINARIAN_INVALID_ROLE = "El usuario especificado no tiene rol de veterinario";
+    public static final String APPOINTMENT_PET_NOT_OWNED = "La mascota especificada no te pertenece";
+
+    public static final String MEDICAL_RECORD_NOT_FOUND = "No se encontró el historial médico";
+    public static final String MEDICAL_RECORD_ALREADY_EXISTS = "La cita ya tiene un historial médico asociado";
+    public static final String APPOINTMENT_NOT_FOUND = "Cita no encontrada";
 }

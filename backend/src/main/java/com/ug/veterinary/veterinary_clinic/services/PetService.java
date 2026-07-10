@@ -1,6 +1,9 @@
 package com.ug.veterinary.veterinary_clinic.services;
 
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -60,6 +63,29 @@ public class PetService {
             }
             throw ex;
         }
+    }
+
+    public List<PetResponse> getMyPets() {
+        Integer ownerId = SecurityUtils.getCurrentUser().getId();
+
+        return petRepository.findByOwnerId(ownerId)
+                .stream()
+                .map(PetResponse::from)
+                .toList();
+    }
+
+    public List<PetResponse> getPetsByOwner(Integer ownerId) {
+        return petRepository.findByOwnerId(ownerId)
+                .stream()
+                .map(PetResponse::from)
+                .toList();
+    }
+
+    public List<PetResponse> getAllPets() {
+        return petRepository.findAll()
+                .stream()
+                .map(PetResponse::from)
+                .toList();
     }
 
     private AppUser resolveOwner(Integer ownerId) {
