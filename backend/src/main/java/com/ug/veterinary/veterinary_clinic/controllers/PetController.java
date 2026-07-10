@@ -13,8 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ug.veterinary.veterinary_clinic.annotations.CanCreatePet;
 import com.ug.veterinary.veterinary_clinic.annotations.CanReadAllPets;
-import com.ug.veterinary.veterinary_clinic.annotations.CanReadClientPets;
-import com.ug.veterinary.veterinary_clinic.annotations.CanReadOwnPets;
+import com.ug.veterinary.veterinary_clinic.annotations.CanReadPet;
 import com.ug.veterinary.veterinary_clinic.dto.request.RegisterPetRequest;
 import com.ug.veterinary.veterinary_clinic.dto.response.ApiResponse;
 import com.ug.veterinary.veterinary_clinic.dto.response.PetResponse;
@@ -37,14 +36,24 @@ public class PetController {
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(response));
     }
 
-    @CanReadOwnPets
+    @CanReadPet
+    @GetMapping("/{petId}")
+    public ResponseEntity<ApiResponse<PetResponse>> getPetById(
+            @PathVariable Integer petId
+    ) {
+        return ResponseEntity.ok(
+                ApiResponse.success(petService.getPetById(petId))
+        );
+    }
+
+    @CanReadPet
     @GetMapping("/me")
     public ResponseEntity<ApiResponse<List<PetResponse>>> getMyPets() {
         return ResponseEntity.ok(ApiResponse.success(petService.getMyPets()));
     }
 
-    @CanReadClientPets
-    @GetMapping("/{ownerId}")
+    @CanReadPet
+    @GetMapping("/client/{ownerId}")
     public ResponseEntity<ApiResponse<List<PetResponse>>> getPetsByOwner(@PathVariable Integer ownerId) {
         return ResponseEntity.ok(ApiResponse.success(petService.getPetsByOwner(ownerId)));
     }

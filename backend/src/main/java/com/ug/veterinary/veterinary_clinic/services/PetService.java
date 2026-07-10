@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -75,6 +76,7 @@ public class PetService {
     }
 
     public List<PetResponse> getPetsByOwner(Integer ownerId) {
+        validateOwnerAccess(ownerId);
         return petRepository.findByOwnerId(ownerId)
                 .stream()
                 .map(PetResponse::from)
@@ -86,6 +88,17 @@ public class PetService {
                 .stream()
                 .map(PetResponse::from)
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public PetResponse getPetById(Integer petId) {
+
+        Pet pet = petRepository.findById(petId)
+                .orElseThrow(() -> new ResourceNotFoundException(MessageConstants.PET_NOT_FOUND));
+
+        validatePetAccess(pet);
+
+        return PetResponse.from(pet);
     }
 
     private AppUser resolveOwner(Integer ownerId) {
@@ -113,5 +126,27 @@ public class PetService {
         }
 
         return owner;
+    }
+
+    private void validatePetAccess(Pet pet) {
+        AppUser currentUser = SecurityUtils.getCurrentUser().getAppUser();
+        boolean isClient = currentUser.getRoles().stream()
+                .anyMatch(role -> role.getName() == RoleEnum.CLIENTE);
+        
+        if (!isClient) return;
+
+        if (!pet.getOwner().getId().equals(currentUser.getId()))
+            throw new AccessDeniedException(MessageConstants.ACCESS_DENIED);   
+    }
+
+    private void validateOwnerAccess(Integer ownerId) {
+        AppUser currentUser = SecurityUtils.getCurrentUser().getAppUser();
+        boolean isClient = currentUser.getRoles().stream()
+                .anyMatch(role -> role.getName() == RoleEnum.CLIENTE);
+        
+        if (!isClient) return;
+        
+        if (!currentUser.getId().equals(ownerId)) 
+            throw new AccessDeniedException(MessageConstants.ACCESS_DENIED);
     }
 }
