@@ -5,14 +5,14 @@ const OWNER_NAV: NavItem[] = [
   { label: 'Inicio', icon: 'heroHome', route: '/home' },
   { label: 'Mascotas', icon: 'heroHeart', route: '/pets' },
   { label: 'Citas', icon: 'heroCalendarDays', route: '/appointments' },
-  { label: 'Perfil', icon: 'heroUserCircle', route: '/profile' },
+  { label: 'Historial', icon: 'heroFolder', route: '/medical-record' },
 ];
 
 const VET_NAV: NavItem[] = [
   { label: 'Inicio', icon: 'heroHome', route: '/home' },
-  { label: 'Pacientes', icon: 'heroClipboardDocumentList', route: '/patients' },
+  { label: 'Pacientes', icon: 'heroClipboardDocumentList', route: '/pets' },
   { label: 'Citas', icon: 'heroCalendarDays', route: '/appointments' },
-  { label: 'Perfil', icon: 'heroUserCircle', route: '/profile' },
+  { label: 'Historial', icon: 'heroFolder', route: '/medical-record' },
 ];
 
 export function getNavItemsForRoles(roles: Role[]): NavItem[] {

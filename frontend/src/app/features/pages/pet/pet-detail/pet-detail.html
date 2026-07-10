@@ -1,0 +1,53 @@
+<section class="px-5 pt-4 flex justify-center">
+  @if (pet(); as p) {
+    <div class="card bg-base-100 shadow-sm w-full max-w-md">
+      <figure class="h-64 bg-base-200">
+        @if (p.photoUrl) {
+          <img [src]="p.photoUrl" [alt]="p.name" class="w-full h-full object-cover" />
+        } @else {
+          <ng-icon name="heroPhoto" class="text-5xl text-base-content/30" />
+        }
+      </figure>
+
+      <div class="card-body gap-3">
+        <h2 class="card-title">{{ p.name }}</h2>
+
+        <div class="grid grid-cols-2 gap-y-2 text-sm">
+          <span class="text-base-content/50">Especie</span>
+          <span>{{ p.species }}</span>
+
+          <span class="text-base-content/50">Raza</span>
+          <span>{{ p.breed }}</span>
+
+          <span class="text-base-content/50">Sexo</span>
+          <span>{{ p.sex }}</span>
+
+          <span class="text-base-content/50">Peso</span>
+          <span>{{ p.weight }} kg</span>
+
+          <span class="text-base-content/50">Nacimiento</span>
+          <span>{{ p.birthDate }}</span>
+
+          <span class="text-base-content/50">Esterilizado</span>
+          <span>{{ p.neutered ? 'Sí' : 'No' }}</span>
+
+          <span class="text-base-content/50">Dueño</span>
+          <span>{{ p.ownerName }}</span>
+        </div>
+
+        <button
+          type="button"
+          class="btn btn-primary rounded-full mt-2"
+          (click)="goToMedicalHistory()"
+        >
+          Ver historial médico
+        </button>
+      </div>
+    </div>
+  } @else {
+    <div class="flex flex-col items-center gap-3 py-10">
+      <p class="text-sm text-base-content/50">No se pudo cargar la información de la mascota.</p>
+      <a routerLink="/pets" class="btn btn-ghost btn-sm">Volver al listado</a>
+    </div>
+  }
+</section>

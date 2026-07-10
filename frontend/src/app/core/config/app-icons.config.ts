@@ -9,6 +9,7 @@ import {
   heroEye,
   heroXMark,
   heroAdjustmentsHorizontal,
+  heroFolder,
 } from '@ng-icons/heroicons/outline';
 
 export const appIcons = {
@@ -22,4 +23,5 @@ export const appIcons = {
   heroEye,
   heroXMark,
   heroAdjustmentsHorizontal,
+  heroFolder,
 };

@@ -31,7 +31,7 @@ export class PetService {
     return this.http.get<ApiResponse<PetResponse[]>>(this.baseUrl);
   }
 
-  // getPetById(id: number): Observable<ApiResponse<petResponse>> {
-  //   return this.http.get<ApiResponse<petResponse>>(`${this.baseUrl}/detail/${id}`);
-  // }
+  getPetById(id: number): Observable<ApiResponse<PetResponse>> {
+    return this.http.get<ApiResponse<PetResponse>>(`${this.baseUrl}/detail/${id}`);
+  }
 }
