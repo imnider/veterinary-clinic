@@ -5,10 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.ug.veterinary.veterinary_clinic.enums.AppointmentStatusEnum;
+import com.ug.veterinary.veterinary_clinic.enums.AppointmentTypeEnum;
 
 @Entity
 @Table(name = "appointment")
@@ -37,11 +41,14 @@ public class Appointment extends TimestampedAuditable {
     @Column(name = "reason")
     private String reason;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "appointment_type", nullable = false)
-    private String appointmentType;
+    private AppointmentTypeEnum appointmentType;
 
+    @Setter
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private String status;
+    private AppointmentStatusEnum status;
 
     @Builder.Default
     @ManyToMany(fetch = FetchType.LAZY)

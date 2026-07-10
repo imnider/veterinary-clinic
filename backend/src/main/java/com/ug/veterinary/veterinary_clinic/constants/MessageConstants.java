@@ -35,4 +35,5 @@ public final class MessageConstants {
     public static final String MEDICAL_RECORD_NOT_FOUND = "No se encontró el historial médico";
     public static final String MEDICAL_RECORD_ALREADY_EXISTS = "La cita ya tiene un historial médico asociado";
     public static final String APPOINTMENT_NOT_FOUND = "Cita no encontrada";
+    public static final String APPOINTMENT_STATUS_CANNOT_BE_UPDATED = "Solo se pueden modificar citas en estado SCHEDULED";
 }
