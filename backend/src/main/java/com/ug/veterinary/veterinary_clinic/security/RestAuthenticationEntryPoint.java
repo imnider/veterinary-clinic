@@ -30,7 +30,7 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.getWriter().write(
-                objectMapper.writeValueAsString(ApiResponse.error(MessageConstants.INVALID_CREDENTIALS))
+                objectMapper.writeValueAsString(ApiResponse.error(MessageConstants.UNAUTHENTICATED))
         );
     }
 }

@@ -6,13 +6,23 @@ public final class ValidationConstants {
 
     // ── Tamaños: login ──────────────────────────────────────────────────
     public static final int EMAIL_MAX = 150;
-    public static final int PASSWORD_MIN = 8;
+    public static final int PASSWORD_MIN = 6;
     public static final int USERNAME_MAX = 100;
 
     // ── Tamaños: pet ─────────────────────────────────────────────
     public static final int PET_NAME_MAX = 100;
     public static final int PET_SPECIES_MAX = 50;
     public static final int PET_BREED_MAX = 50;
+
+    // ── Tamaños: name ────────────────────────────────────────────
+    public static final int USER_NAME_MAX = 150;
+
+    // ── Mensajes: name ───────────────────────────────────────────
+    public static final String USER_NAME_REQUIRED = "El nombre es obligatorio";
+    public static final String USER_NAME_MAX_MESSAGE = "El nombre no puede superar los " + USER_NAME_MAX + " caracteres";
+
+    // ── Mensajes: roles ───────────────────────────────────────────
+    public static final String ROLES_REQUIRED = "Debe asignar al menos un rol";
 
     // ── Mensajes: pet ────────────────────────────────────────────
     public static final String PET_NAME_REQUIRED = "El nombre de la mascota es obligatorio";

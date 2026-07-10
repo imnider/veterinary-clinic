@@ -9,4 +9,6 @@ import com.ug.veterinary.veterinary_clinic.entities.AppUser;
 public interface AppUserRepository extends JpaRepository<AppUser, Integer> {
     Optional<AppUser> findByUsername(String username);
     Optional<AppUser> findByEmail(String email);
+    boolean existsByUsername(String username);
+    boolean existsByEmail(String email);
 }
