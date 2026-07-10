@@ -28,8 +28,8 @@ public class Appointment extends TimestampedAuditable {
     private Pet pet;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private AppUser user;
+    @JoinColumn(name = "veterinarian_id", nullable = false)
+    private AppUser veterinarian;
 
     @Column(name = "appointment_date", nullable = false)
     private LocalDateTime appointmentDate;

@@ -97,7 +97,7 @@ GO
 CREATE TABLE appointment (
     appointment_id INT IDENTITY(1,1) PRIMARY KEY,
     pet_id INT NOT NULL,
-    user_id INT NOT NULL,
+    veterinarian_id INT NOT NULL,
     appointment_date DATETIME2 NOT NULL,
     reason NVARCHAR(255) NULL,
     appointment_type NVARCHAR(20) NOT NULL,
@@ -105,7 +105,7 @@ CREATE TABLE appointment (
     created_at DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
     updated_at DATETIME2 NULL,
     CONSTRAINT FK_APPOINTMENT_PET FOREIGN KEY (pet_id) REFERENCES pet(pet_id),
-    CONSTRAINT FK_APPOINTMENT_USER FOREIGN KEY (user_id) REFERENCES app_user(user_id),
+    CONSTRAINT FK_APPOINTMENT_USER FOREIGN KEY (veterinarian_id) REFERENCES app_user(user_id),
     CONSTRAINT CK_APPOINTMENT_TYPE CHECK (appointment_type IN ('Medical', 'Service')),
     CONSTRAINT CK_APPOINTMENT_STATUS CHECK (status IN ('Scheduled', 'Completed', 'Cancelled', 'NoShow'))
 );
