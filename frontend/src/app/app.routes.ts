@@ -38,6 +38,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/pages/pet/pet-detail/pet-detail').then((m) => m.PetDetailComponent),
       },
+      {
+        path: 'pets/register',
+        loadComponent: () =>
+          import('./features/pages/pet/pet-register/pet-register').then(
+            (m) => m.PetRegisterComponent,
+          ),
+      },
     ],
   },
   {

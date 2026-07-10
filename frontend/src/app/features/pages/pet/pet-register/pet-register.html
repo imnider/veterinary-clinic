@@ -1,0 +1,96 @@
+<section class="px-5 pt-6 pb-10 flex flex-col gap-6 max-w-md mx-auto">
+  <h1 class="text-xl font-semibold text-base-content">Registrar mascota</h1>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+    <div class="flex flex-col items-center gap-2">
+      <div class="avatar">
+        <div
+          class="w-28 h-28 rounded-full ring ring-base-300 ring-offset-2 overflow-hidden bg-base-200"
+        >
+          @if (photoPreview()) {
+            <img
+              [src]="photoPreview()"
+              alt="Foto de la mascota"
+              class="object-cover w-full h-full"
+            />
+          } @else {
+            <div
+              class="w-full h-full flex items-center justify-center text-base-content/40 text-sm"
+            >
+              Sin foto
+            </div>
+          }
+        </div>
+      </div>
+      <label class="btn btn-sm btn-outline rounded-full">
+        Elegir foto
+        <input type="file" accept="image/*" class="hidden" (change)="onPhotoSelected($event)" />
+      </label>
+    </div>
+
+    <label class="form-control">
+      <span class="label-text text-base-content/70 mb-1">Nombre</span>
+      <input
+        formControlName="name"
+        type="text"
+        placeholder="Nombre de la mascota"
+        class="input input-bordered rounded-full w-full"
+      />
+      @if (form.controls.name.invalid && form.controls.name.touched) {
+        <span class="text-error text-xs mt-1 ml-3">El nombre es obligatorio.</span>
+      }
+    </label>
+
+    <label class="form-control">
+      <span class="label-text text-base-content/70 mb-1">Especie</span>
+      <select formControlName="species" class="select select-bordered rounded-full w-full">
+        <option value="" disabled selected>Selecciona una especie</option>
+        <option value="PERRO">Perro</option>
+        <option value="GATO">Gato</option>
+        <option value="AVE">Ave</option>
+        <option value="OTRO">Otro</option>
+      </select>
+    </label>
+
+    <label class="form-control">
+      <span class="label-text text-base-content/70 mb-1">Raza</span>
+      <input
+        formControlName="breed"
+        type="text"
+        placeholder="Raza (opcional)"
+        class="input input-bordered rounded-full w-full"
+      />
+    </label>
+
+    <label class="form-control">
+      <span class="label-text text-base-content/70 mb-1">Fecha de nacimiento</span>
+      <input
+        formControlName="birthDate"
+        type="date"
+        class="input input-bordered rounded-full w-full"
+      />
+    </label>
+
+    <label class="form-control">
+      <span class="label-text text-base-content/70 mb-1">Peso (kg)</span>
+      <input
+        formControlName="weight"
+        type="number"
+        step="0.1"
+        placeholder="0.0"
+        class="input input-bordered rounded-full w-full"
+      />
+    </label>
+
+    @if (errorMessage()) {
+      <div class="alert alert-error rounded-2xl text-sm">{{ errorMessage() }}</div>
+    }
+
+    <button type="submit" class="btn btn-primary rounded-full mt-2" [disabled]="isSubmitting()">
+      @if (isSubmitting()) {
+        <span class="loading loading-spinner loading-sm"></span>
+      }
+      Registrar mascota
+    </button>
+  </form>
+</section>
