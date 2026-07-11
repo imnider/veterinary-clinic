@@ -3,12 +3,6 @@ export interface VeterinarianOption {
   name: string;
 }
 
-export const VETERINARIANS: VeterinarianOption[] = [
-  { id: 3, name: 'Dr. Carlos Mendoza' },
-  { id: 4, name: 'Dra. Andrea Solís' },
-  { id: 5, name: 'Dr. Luis Paredes' },
-];
-
 export interface SelectOption {
   value: string;
   label: string;
