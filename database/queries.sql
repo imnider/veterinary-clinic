@@ -1,4 +1,4 @@
-USE db_veterinary_clinic;
+USE db_veterinary_clinic_queries;
 GO
 
 -- 1. Ver todas las citas de una mascota
@@ -17,7 +17,7 @@ ORDER BY ap.appointment_date DESC;
 GO
 
 -- 2. Mostrar últimos 3 tratamientos de una mascota (por cita)
-DECLARE @pet_id INT = 2;
+DECLARE @pet_id INT = 1;
 
 SELECT TOP 3
     mr.medical_record_id,
@@ -162,9 +162,9 @@ GO
 SELECT u.user_id, u.name AS vet_name, COUNT(ap.appointment_id) AS total_appointments
 FROM app_user u
 INNER JOIN appointment ap
-    ON ap.veterinarian_id = u.user_id
+    ON ap.veterinarian_id = u.user_id	
 GROUP BY u.user_id, u.name
-HAVING COUNT(ap.appointment_id) > (
+HAVING COUNT(ap.appointment_id) >= (
     SELECT AVG(cnt * 1.0)
     FROM (
         SELECT COUNT(*) AS cnt
