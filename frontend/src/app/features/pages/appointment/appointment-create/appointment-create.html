@@ -50,6 +50,7 @@
         <input
           formControlName="appointmentDate"
           type="datetime-local"
+          [min]="minDate"
           class="input input-bordered rounded-full w-full"
         />
         @if (form.controls.appointmentDate.invalid && form.controls.appointmentDate.touched) {

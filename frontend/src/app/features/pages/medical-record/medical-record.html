@@ -40,7 +40,12 @@
                   Dr(a). {{ entry.data.veterinarianName }}
                 </p>
               </div>
-              <span class="badge badge-outline rounded-full">{{ entry.data.status }}</span>
+              <span
+                class="badge rounded-full"
+                [class]="getStatusOption(entry.data.status)?.badgeClass ?? 'badge-outline'"
+              >
+                {{ getStatusOption(entry.data.status)?.label ?? entry.data.status }}
+              </span>
             </div>
           } @else {
             <div>
