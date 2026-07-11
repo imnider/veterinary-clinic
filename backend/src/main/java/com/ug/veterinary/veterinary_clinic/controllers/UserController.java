@@ -2,6 +2,9 @@ package com.ug.veterinary.veterinary_clinic.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ug.veterinary.veterinary_clinic.annotations.CanCreateUser;
+import com.ug.veterinary.veterinary_clinic.annotations.CanReadAllUsers;
 import com.ug.veterinary.veterinary_clinic.dto.request.RegisterUserRequest;
 import com.ug.veterinary.veterinary_clinic.dto.response.ApiResponse;
 import com.ug.veterinary.veterinary_clinic.dto.response.UserResponse;
@@ -34,5 +38,11 @@ public class UserController {
     public ResponseEntity<ApiResponse<UserResponse>> getCurrentUser() {
         UserResponse response = appUserService.getCurrentUserProfile();
         return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    @CanReadAllUsers
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<UserResponse>>> getUsers() {
+        return ResponseEntity.ok(ApiResponse.success(appUserService.getUsers()));
     }
 }

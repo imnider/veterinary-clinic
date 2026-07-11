@@ -18,6 +18,7 @@ import com.ug.veterinary.veterinary_clinic.repositories.RoleRepository;
 import com.ug.veterinary.veterinary_clinic.security.SecurityUtils;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -70,5 +71,22 @@ public class AppUserService {
         }
 
         return roles;
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserResponse> getUsers() {
+        AppUser currentUser = SecurityUtils.getCurrentUser().getAppUser();
+
+        if (currentUser.getRoles().stream().anyMatch(r -> r.getName() == RoleEnum.ADMIN)) {
+            return appUserRepository.findAll()
+                    .stream()
+                    .map(UserResponse::from)
+                    .toList();
+        } else {
+            return appUserRepository.findByRolesName(RoleEnum.VETERINARIO)
+                    .stream()
+                    .map(UserResponse::from)
+                    .toList();
+        }
     }
 }

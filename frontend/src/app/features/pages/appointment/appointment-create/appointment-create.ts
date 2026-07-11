@@ -6,10 +6,9 @@ import { PetService } from '../../../services/pet.service';
 import { AppointmentService } from '../../../services/appointment.service';
 import { PetResponse } from '../../../interfaces/entities/pet.interface';
 import { CreateAppointmentRequest } from '../../../interfaces/entities/appointment.interface';
-import {
-  APPOINTMENT_TYPES,
-  VETERINARIANS,
-} from '../../../../shared/constants/appointment.constants';
+import { APPOINTMENT_TYPES } from '../../../../shared/constants/appointment.constants';
+import { UserResponse } from '../../../interfaces/entities/user.interface';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-appointment-create',
@@ -21,13 +20,15 @@ export class AppointmentCreateComponent implements OnInit {
   private fb = inject(FormBuilder);
   private petService = inject(PetService);
   private appointmentService = inject(AppointmentService);
+  private userService = inject(UserService);
   private router = inject(Router);
 
   readonly appointmentTypes = APPOINTMENT_TYPES;
-  readonly veterinarians = VETERINARIANS;
+  readonly veterinarians = signal<UserResponse[]>([]);
 
   myPets = signal<PetResponse[]>([]);
   isLoadingPets = signal(true);
+  isLoadingVeterinarians = signal(true);
   isSubmitting = signal(false);
   errorMessage = signal<string | null>(null);
 
@@ -48,6 +49,17 @@ export class AppointmentCreateComponent implements OnInit {
       error: () => {
         this.isLoadingPets.set(false);
         this.errorMessage.set('No se pudieron cargar tus mascotas.');
+      },
+    });
+
+    this.userService.getUsers().subscribe({
+      next: (res) => {
+        this.veterinarians.set(res.data ?? []);
+        this.isLoadingVeterinarians.set(false);
+      },
+      error: () => {
+        this.isLoadingVeterinarians.set(false);
+        this.errorMessage.set('No se pudieron cargar los veterinarios.');
       },
     });
   }

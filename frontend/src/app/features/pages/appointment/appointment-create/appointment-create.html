@@ -36,7 +36,7 @@
         <span class="label-text text-base-content/70 mb-1">Veterinario</span>
         <select formControlName="veterinarianId" class="select select-bordered rounded-full w-full">
           <option [ngValue]="null" disabled selected>Selecciona un veterinario</option>
-          @for (vet of veterinarians; track vet.id) {
+          @for (vet of veterinarians(); track vet.id) {
             <option [ngValue]="vet.id">{{ vet.name }}</option>
           }
         </select>
