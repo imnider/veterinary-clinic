@@ -34,6 +34,7 @@ export class AppointmentListComponent implements OnInit {
   errorMessage = signal<string | null>(null);
   filter = signal<FilterMode>('pending');
   updatingId = signal<number | null>(null);
+  pendingCancelId = signal<number | null>(null);
 
   isStaff = computed(() => this.authService.hasAnyRole([Role.VETERINARIO, Role.ADMIN]));
 
@@ -56,6 +57,7 @@ export class AppointmentListComponent implements OnInit {
   load(): void {
     this.loading.set(true);
     this.errorMessage.set(null);
+    this.pendingCancelId.set(null);
 
     this.appointmentService.getAppointments(this.filter() === 'pending').subscribe({
       next: (res) => {
@@ -85,5 +87,14 @@ export class AppointmentListComponent implements OnInit {
 
   goToRecord(appointment: AppointmentResponse): void {
     this.router.navigate(['/appointments', appointment.id, 'record']);
+  }
+
+  requestCancel(appointment: AppointmentResponse): void {
+    if (this.pendingCancelId() === appointment.id) {
+      this.pendingCancelId.set(null);
+      this.changeStatus(appointment, 'CANCELLED');
+    } else {
+      this.pendingCancelId.set(appointment.id);
+    }
   }
 }

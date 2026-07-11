@@ -60,47 +60,35 @@
             </p>
 
             @if (isStaff()) {
-              <div class="flex flex-wrap gap-2 mt-2">
-                @if (appt.status === 'PENDIENTE') {
-                  <button
-                    type="button"
-                    class="btn btn-sm btn-outline btn-info rounded-full gap-1"
-                    [disabled]="updatingId() === appt.id"
-                    (click)="changeStatus(appt, 'CONFIRMADA')"
-                  >
-                    <ng-icon name="heroCheck" />
-                    Confirmar
-                  </button>
-                  <button
-                    type="button"
-                    class="btn btn-sm btn-outline btn-error rounded-full gap-1"
-                    [disabled]="updatingId() === appt.id"
-                    (click)="changeStatus(appt, 'CANCELADA')"
-                  >
-                    <ng-icon name="heroXCircle" />
-                    Cancelar
-                  </button>
-                }
-                @if (appt.status === 'CONFIRMADA') {
+              @if (appt.status === 'SCHEDULED') {
+                <div class="flex flex-wrap gap-2 mt-2">
                   <button
                     type="button"
                     class="btn btn-sm btn-primary rounded-full gap-1"
                     (click)="goToRecord(appt)"
                   >
                     <ng-icon name="heroPencilSquare" />
-                    Registrar atención
+                    Completar cita
                   </button>
+                </div>
+              }
+            } @else {
+              @if (appt.status === 'SCHEDULED') {
+                <div class="flex flex-wrap gap-2 mt-2">
                   <button
                     type="button"
-                    class="btn btn-sm btn-outline btn-error rounded-full gap-1"
+                    class="btn btn-sm rounded-full gap-1"
+                    [class]="pendingCancelId() === appt.id ? 'btn-error' : 'btn-outline btn-error'"
                     [disabled]="updatingId() === appt.id"
-                    (click)="changeStatus(appt, 'CANCELADA')"
+                    (click)="requestCancel(appt)"
                   >
                     <ng-icon name="heroXCircle" />
-                    Cancelar
+                    {{
+                      pendingCancelId() === appt.id ? '¿Confirmar cancelación?' : 'Cancelar cita'
+                    }}
                   </button>
-                }
-              </div>
+                </div>
+              }
             }
           </div>
         </div>

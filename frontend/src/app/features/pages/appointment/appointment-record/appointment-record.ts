@@ -53,7 +53,7 @@ export class AppointmentRecordComponent implements OnInit {
     this.medicalRecordService.createMedicalRecord(request).subscribe({
       next: () => {
         this.appointmentService
-          .updateAppointmentStatus(this.appointmentId, { status: 'ATENDIDA' })
+          .updateAppointmentStatus(this.appointmentId, { status: 'COMPLETED' })
           .subscribe({
             next: () => {
               this.isSubmitting.set(false);
