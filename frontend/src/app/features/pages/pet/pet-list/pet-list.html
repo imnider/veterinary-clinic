@@ -51,14 +51,14 @@
             class="card bg-base-100 shadow-sm cursor-pointer hover:shadow-md transition-shadow"
             (click)="goToDetail(pet)"
           >
-            <figure class="h-40 bg-base-200">
+            <figure class="h-52 bg-base-200">
               @if (pet.photoUrl) {
                 <img [src]="pet.photoUrl" [alt]="pet.name" class="w-full h-full object-cover" />
               } @else {
                 <ng-icon name="heroPhoto" class="text-4xl text-base-content/30" />
               }
             </figure>
-            <div class="card-body">
+            <div class="card-body p-3">
               <h3 class="card-title text-base">{{ pet.name }}</h3>
               <p class="text-sm text-base-content/60">{{ pet.species }} · {{ pet.breed }}</p>
             </div>
