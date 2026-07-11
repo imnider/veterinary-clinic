@@ -10,6 +10,16 @@ import {
   heroXMark,
   heroAdjustmentsHorizontal,
   heroFolder,
+  heroPhoto,
+  heroPlus,
+  heroCheck,
+  heroCheckCircle,
+  heroXCircle,
+  heroClock,
+  heroChevronLeft,
+  heroPencilSquare,
+  heroExclamationTriangle,
+  heroArrowLeft,
 } from '@ng-icons/heroicons/outline';
 
 export const appIcons = {
@@ -24,4 +34,14 @@ export const appIcons = {
   heroXMark,
   heroAdjustmentsHorizontal,
   heroFolder,
+  heroPhoto,
+  heroPlus,
+  heroCheck,
+  heroCheckCircle,
+  heroXCircle,
+  heroClock,
+  heroChevronLeft,
+  heroPencilSquare,
+  heroExclamationTriangle,
+  heroArrowLeft,
 };

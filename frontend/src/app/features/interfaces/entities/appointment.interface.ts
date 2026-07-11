@@ -1,17 +1,3 @@
-export interface AppointmentSummary {
-  petName: string;
-  reason: string;
-  appointmentDate: string;
-}
-
-export interface AppointmentRequest {
-  petId: number;
-  veterinarianId: number;
-  appointmentDate: string;
-  reason: string;
-  appointmentType: string;
-}
-
 export interface AppointmentResponse {
   id: number;
   petId: number;
@@ -21,5 +7,17 @@ export interface AppointmentResponse {
   appointmentDate: string;
   reason: string;
   appointmentType: string;
+  status: string;
+}
+
+export interface CreateAppointmentRequest {
+  petId: number;
+  veterinarianId: number;
+  appointmentDate: string;
+  reason: string;
+  appointmentType: string;
+}
+
+export interface UpdateAppointmentStatusRequest {
   status: string;
 }

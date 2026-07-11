@@ -1,0 +1,63 @@
+<!-- pages/pet-history/pet-history.component.html -->
+<section class="px-5 pt-6 pb-10 flex flex-col gap-6 max-w-lg mx-auto">
+  @if (pet(); as p) {
+    <div class="flex items-center gap-4">
+      <div class="avatar">
+        <div class="w-16 h-16 rounded-full bg-base-200 overflow-hidden">
+          @if (p.photoUrl) {
+            <img [src]="p.photoUrl" alt="{{ p.name }}" class="object-cover w-full h-full" />
+          }
+        </div>
+      </div>
+      <div>
+        <h1 class="text-xl font-semibold text-base-content">{{ p.name }}</h1>
+        <p class="text-sm text-base-content/60">{{ p.species }} · {{ p.breed || 'Sin raza' }}</p>
+      </div>
+    </div>
+  }
+
+  @if (isLoading()) {
+    <div class="flex justify-center py-10">
+      <span class="loading loading-spinner loading-md"></span>
+    </div>
+  } @else if (errorMessage()) {
+    <div class="alert alert-error rounded-2xl text-sm">{{ errorMessage() }}</div>
+  } @else {
+    <div class="flex flex-col gap-3">
+      <h2 class="font-semibold text-base-content/80">Historial</h2>
+
+      @for (entry of timeline(); track entry.date + entry.type) {
+        <div class="card bg-base-100 rounded-3xl shadow-sm border border-base-200 p-4">
+          @if (entry.type === 'appointment') {
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="font-medium text-base-content">Cita · {{ entry.data.appointmentType }}</p>
+                <p class="text-sm text-base-content/60">{{ entry.data.reason }}</p>
+                <p class="text-xs text-base-content/40 mt-1">
+                  Dr(a). {{ entry.data.veterinarianName }}
+                </p>
+              </div>
+              <span class="badge badge-outline rounded-full">{{ entry.data.status }}</span>
+            </div>
+          } @else {
+            <div>
+              <p class="font-medium text-base-content">Registro médico</p>
+              <p class="text-sm text-base-content/60">{{ entry.data.diagnosis }}</p>
+              @if (entry.data.notes) {
+                <p class="text-xs text-base-content/40 mt-1">{{ entry.data.notes }}</p>
+              }
+              @if (entry.data.recordedWeight) {
+                <p class="text-xs text-base-content/40">
+                  Peso registrado: {{ entry.data.recordedWeight }} kg
+                </p>
+              }
+            </div>
+          }
+          <p class="text-xs text-base-content/30 mt-2">{{ entry.date | date: 'medium' }}</p>
+        </div>
+      } @empty {
+        <p class="text-sm text-base-content/50">Esta mascota no tiene historial aún.</p>
+      }
+    </div>
+  }
+</section>

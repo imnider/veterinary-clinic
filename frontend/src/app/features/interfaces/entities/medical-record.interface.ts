@@ -8,3 +8,10 @@ export interface MedicalRecordResponse {
   notes: string;
   recordedWeight: number;
 }
+
+export interface CreateMedicalRecordRequest {
+  appointmentId: number;
+  diagnosis: string;
+  notes: string;
+  recordedWeight: number;
+}
