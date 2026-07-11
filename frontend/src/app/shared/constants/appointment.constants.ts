@@ -4,9 +4,9 @@ export interface VeterinarianOption {
 }
 
 export const VETERINARIANS: VeterinarianOption[] = [
-  { id: 1, name: 'Dr. Carlos Mendoza' },
-  { id: 2, name: 'Dra. Andrea Solís' },
-  { id: 3, name: 'Dr. Luis Paredes' },
+  { id: 3, name: 'Dr. Carlos Mendoza' },
+  { id: 4, name: 'Dra. Andrea Solís' },
+  { id: 5, name: 'Dr. Luis Paredes' },
 ];
 
 export interface SelectOption {
@@ -15,10 +15,8 @@ export interface SelectOption {
 }
 
 export const APPOINTMENT_TYPES: SelectOption[] = [
-  { value: 'CONSULTA', label: 'Consulta general' },
-  { value: 'VACUNACION', label: 'Vacunación' },
-  { value: 'CIRUGIA', label: 'Cirugía' },
-  { value: 'EMERGENCIA', label: 'Emergencia' },
+  { value: 'MEDICAL', label: 'Consulta general' },
+  { value: 'SERVICE', label: 'Servicio' },
 ];
 
 export interface AppointmentStatusOption extends SelectOption {
@@ -48,6 +46,6 @@ export const PET_SPECIES: SelectOption[] = [
 ];
 
 export const PET_SEX: SelectOption[] = [
-  { value: 'MACHO', label: 'Macho' },
-  { value: 'HEMBRA', label: 'Hembra' },
+  { value: 'M', label: 'Macho' },
+  { value: 'F', label: 'Hembra' },
 ];

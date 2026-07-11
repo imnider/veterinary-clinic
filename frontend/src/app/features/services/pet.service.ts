@@ -32,6 +32,6 @@ export class PetService {
   }
 
   getPetById(id: number): Observable<ApiResponse<PetResponse>> {
-    return this.http.get<ApiResponse<PetResponse>>(`${this.baseUrl}/detail/${id}`);
+    return this.http.get<ApiResponse<PetResponse>>(`${this.baseUrl}/${id}`);
   }
 }
