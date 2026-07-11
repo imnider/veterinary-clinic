@@ -34,11 +34,20 @@
 
   <!-- body -->
   <div class="flex flex-col gap-3">
-    <h2 class="font-semibold text-base-content/80">Citas próximas</h2>
-    @for (appointment of upcomingAppointments(); track appointment.appointmentDate) {
-      <app-appointment-card [appointment]="appointment" />
-    } @empty {
-      <p class="text-sm text-base-content/50">No tienes citas próximas.</p>
+    <div class="flex items-center justify-between">
+      <h2 class="font-semibold text-base-content/80">Citas próximas</h2>
+      <a routerLink="/appointments" class="text-sm text-primary font-medium">Ver todas</a>
+    </div>
+    @if (isLoadingAppointments()) {
+      <div class="flex justify-center py-6">
+        <span class="loading loading-spinner loading-md"></span>
+      </div>
+    } @else {
+      @for (appointment of upcomingAppointments(); track appointment.id) {
+        <app-appointment-card [appointment]="appointment" />
+      } @empty {
+        <p class="text-sm text-base-content/50">No tienes citas próximas.</p>
+      }
     }
   </div>
 </section>

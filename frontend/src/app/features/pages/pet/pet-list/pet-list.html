@@ -1,46 +1,40 @@
-<section class="px-5 pt-2 flex flex-col gap-5">
+<section class="px-5 pt-2 pb-6 flex flex-col gap-5">
+  <div class="flex items-center justify-between gap-3 flex-wrap">
+    <h1 class="text-xl font-semibold text-base-content">
+      {{ isStaff() ? 'Mascotas' : 'Mis mascotas' }}
+    </h1>
+    <a routerLink="/pets/register" class="btn btn-primary btn-sm rounded-full gap-1">
+      <ng-icon name="heroPlus" />
+      Registrar mascota
+    </a>
+  </div>
+
   @if (isStaff()) {
-    <!-- Buscador de clientes por username (solo vet/admin) -->
-    <!-- <div class="flex flex-col gap-2 max-w-md">
+    <div class="flex flex-col gap-2 max-w-md">
       <label class="input input-bordered rounded-full flex items-center gap-2 bg-base-100">
         <ng-icon name="heroMagnifyingGlass" class="text-base-content/40" />
         <input
-          type="search"
+          type="number"
           class="grow"
-          placeholder="Buscar cliente por username"
-          [ngModel]="usernameQuery()"
-          (ngModelChange)="usernameQuery.set($event)"
-          (keyup.enter)="searchClients()"
+          placeholder="Buscar mascotas por ID de dueño"
+          [value]="ownerIdQuery()"
+          (input)="onOwnerQueryChange($any($event.target).value)"
+          (keyup.enter)="searchByOwner()"
         />
-        <button type="button" class="btn btn-ghost btn-sm btn-circle" (click)="searchClients()">
-          <ng-icon name="heroArrowRight" />
+        <button type="button" class="btn btn-ghost btn-sm btn-circle" (click)="searchByOwner()">
+          <ng-icon name="heroArrowLeft" class="rotate-180" />
         </button>
       </label>
 
-      @if (matchedClients().length > 0) {
-        <ul class="menu bg-base-100 rounded-2xl shadow-sm max-w-md">
-          @for (client of matchedClients(); track client.id) {
-            <li>
-              <a (click)="selectClient(client)">
-                <span class="font-medium">{{ client.username }}</span>
-                <span class="text-base-content/50 text-sm">{{ client.fullName }}</span>
-              </a>
-            </li>
-          }
-        </ul>
-      }
-
-      @if (activeClient()) {
+      @if (activeOwnerId()) {
         <div class="flex items-center gap-2">
-          <span class="badge badge-primary badge-lg">
-            Mascotas de {{ activeClient()?.username }}
-          </span>
-          <button type="button" class="btn btn-ghost btn-xs" (click)="clearClientFilter()">
+          <span class="badge badge-primary badge-lg">Dueño #{{ activeOwnerId() }}</span>
+          <button type="button" class="btn btn-ghost btn-xs" (click)="clearOwnerFilter()">
             Quitar filtro
           </button>
         </div>
       }
-    </div> -->
+    </div>
   }
 
   @if (loading()) {

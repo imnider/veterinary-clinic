@@ -44,9 +44,15 @@
         </button>
       </div>
     </div>
+  } @else if (isLoading()) {
+    <div class="flex justify-center py-10">
+      <span class="loading loading-spinner loading-lg"></span>
+    </div>
   } @else {
     <div class="flex flex-col items-center gap-3 py-10">
-      <p class="text-sm text-base-content/50">No se pudo cargar la información de la mascota.</p>
+      <p class="text-sm text-base-content/50">
+        {{ errorMessage() ?? 'No se pudo cargar la información de la mascota.' }}
+      </p>
       <a routerLink="/pets" class="btn btn-ghost btn-sm">Volver al listado</a>
     </div>
   }

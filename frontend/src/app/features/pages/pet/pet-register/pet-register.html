@@ -14,10 +14,8 @@
               class="object-cover w-full h-full"
             />
           } @else {
-            <div
-              class="w-full h-full flex items-center justify-center text-base-content/40 text-sm"
-            >
-              Sin foto
+            <div class="w-full h-full flex items-center justify-center text-base-content/40">
+              <ng-icon name="heroPhoto" class="text-3xl" />
             </div>
           }
         </div>
@@ -27,6 +25,21 @@
         <input type="file" accept="image/*" class="hidden" (change)="onPhotoSelected($event)" />
       </label>
     </div>
+
+    @if (isStaff()) {
+      <label class="form-control">
+        <span class="label-text text-base-content/70 mb-1">ID del dueño</span>
+        <input
+          formControlName="ownerId"
+          type="number"
+          placeholder="ID del cliente dueño de la mascota"
+          class="input input-bordered rounded-full w-full"
+        />
+        @if (form.controls.ownerId.invalid && form.controls.ownerId.touched) {
+          <span class="text-error text-xs mt-1 ml-3">Indica el ID del dueño.</span>
+        }
+      </label>
+    }
 
     <label class="form-control">
       <span class="label-text text-base-content/70 mb-1">Nombre</span>
@@ -45,11 +58,13 @@
       <span class="label-text text-base-content/70 mb-1">Especie</span>
       <select formControlName="species" class="select select-bordered rounded-full w-full">
         <option value="" disabled selected>Selecciona una especie</option>
-        <option value="PERRO">Perro</option>
-        <option value="GATO">Gato</option>
-        <option value="AVE">Ave</option>
-        <option value="OTRO">Otro</option>
+        @for (opt of species; track opt.value) {
+          <option [value]="opt.value">{{ opt.label }}</option>
+        }
       </select>
+      @if (form.controls.species.invalid && form.controls.species.touched) {
+        <span class="text-error text-xs mt-1 ml-3">Selecciona una especie.</span>
+      }
     </label>
 
     <label class="form-control">
@@ -63,12 +78,28 @@
     </label>
 
     <label class="form-control">
+      <span class="label-text text-base-content/70 mb-1">Sexo</span>
+      <select formControlName="sex" class="select select-bordered rounded-full w-full">
+        <option value="" disabled selected>Selecciona el sexo</option>
+        @for (opt of sexes; track opt.value) {
+          <option [value]="opt.value">{{ opt.label }}</option>
+        }
+      </select>
+      @if (form.controls.sex.invalid && form.controls.sex.touched) {
+        <span class="text-error text-xs mt-1 ml-3">Selecciona el sexo.</span>
+      }
+    </label>
+
+    <label class="form-control">
       <span class="label-text text-base-content/70 mb-1">Fecha de nacimiento</span>
       <input
         formControlName="birthDate"
         type="date"
         class="input input-bordered rounded-full w-full"
       />
+      @if (form.controls.birthDate.invalid && form.controls.birthDate.touched) {
+        <span class="text-error text-xs mt-1 ml-3">La fecha de nacimiento es obligatoria.</span>
+      }
     </label>
 
     <label class="form-control">
@@ -80,6 +111,18 @@
         placeholder="0.0"
         class="input input-bordered rounded-full w-full"
       />
+      @if (form.controls.weight.invalid && form.controls.weight.touched) {
+        <span class="text-error text-xs mt-1 ml-3">Indica un peso válido.</span>
+      }
+    </label>
+
+    <label class="flex items-center gap-3 px-1">
+      <input
+        formControlName="neutered"
+        type="checkbox"
+        class="checkbox checkbox-primary rounded-full"
+      />
+      <span class="label-text text-base-content/70">Esterilizado</span>
     </label>
 
     @if (errorMessage()) {

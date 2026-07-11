@@ -1,38 +1,53 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NgIcon } from '@ng-icons/core';
+import { PetService } from '../../../services/pet.service';
 import { PetResponse } from '../../../interfaces/entities/pet.interface';
 
 @Component({
   selector: 'app-pet-detail',
   standalone: true,
-  imports: [NgIcon],
+  imports: [NgIcon, RouterLink],
   templateUrl: './pet-detail.html',
 })
 export class PetDetailComponent implements OnInit {
+  private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private petService = inject(PetService);
 
   pet = signal<PetResponse | null>(null);
+  isLoading = signal(true);
+  errorMessage = signal<string | null>(null);
 
   ngOnInit(): void {
-    // Como aún no existe GET /api/pets/{id}, dependemos de que la mascota
-    // venga por router state desde pet-list. Si el usuario entra directo
-    // por URL o recarga, no tenemos cómo recuperarla todavía.
+    const petId = Number(this.route.snapshot.paramMap.get('id'));
     const state = this.router.getCurrentNavigation()?.extras.state ?? history.state;
-
     if (state?.['pet']) {
       this.pet.set(state['pet']);
+      this.isLoading.set(false);
     }
 
-    // TODO backend: cuando exista petService.getPetById(id), reemplazar
-    // lo de arriba por una carga real usando el :id de la ruta, con
-    // fallback a router state para evitar el request si ya lo tenemos.
+    if (!petId) {
+      this.isLoading.set(false);
+      this.errorMessage.set('Identificador de mascota inválido.');
+      return;
+    }
+
+    this.petService.getPetById(petId).subscribe({
+      next: (res) => {
+        this.pet.set(res.data);
+        this.isLoading.set(false);
+      },
+      error: () => {
+        this.isLoading.set(false);
+        this.errorMessage.set('No se pudo cargar la información de la mascota.');
+      },
+    });
   }
 
   goToMedicalHistory(): void {
     const pet = this.pet();
     if (!pet) return;
-    // TODO: ruta de historial médico aún no implementada.
-    this.router.navigate(['/pets', pet.id, 'medical-history']);
+    this.router.navigate(['/pets', pet.id, 'history']);
   }
 }
