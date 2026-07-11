@@ -1,5 +1,5 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { NgIcon } from '@ng-icons/core';
 import { PetService } from '../../../services/pet.service';
@@ -35,7 +35,7 @@ export class AppointmentCreateComponent implements OnInit {
   form = this.fb.nonNullable.group({
     petId: [null as number | null, Validators.required],
     veterinarianId: [null as number | null, Validators.required],
-    appointmentDate: ['', Validators.required],
+    appointmentDate: ['', Validators.required, this.futureDateValidator],
     appointmentType: ['', Validators.required],
     reason: ['', [Validators.required, Validators.maxLength(255)]],
   });
@@ -92,5 +92,11 @@ export class AppointmentCreateComponent implements OnInit {
         this.errorMessage.set(err?.error?.message ?? 'No se pudo agendar la cita.');
       },
     });
+  }
+
+  minDate = new Date().toISOString().slice(0, 16);
+  private futureDateValidator(control: AbstractControl) {
+    if (!control.value) return null;
+    return new Date(control.value) > new Date() ? null : { pastDate: true };
   }
 }
