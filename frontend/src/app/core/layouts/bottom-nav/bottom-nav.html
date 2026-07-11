@@ -1,14 +1,14 @@
 <nav
-  class="w-full bg-base-100 border-t border-base-200 px-4 py-2 flex items-center justify-around sticky bottom-0 z-10 md:fixed md:left-0 md:top-0 md:h-screen md:w-20 md:flex-col md:justify-start md:gap-8 md:pt-10 md:border-t-0 md:border-r"
+  class="w-full bg-base-100 border-t border-base-200 px-4 py-2 flex items-center justify-around fixed bottom-0 z-10 md:fixed md:left-0 md:top-0 md:h-screen md:w-48 md:flex-col md:justify-start md:gap-2 md:pt-10 md:border-t-0 md:border-r md:px-3"
 >
   @for (item of items; track item.route) {
     <a
       [routerLink]="item.route"
       routerLinkActive="text-primary"
-      class="flex flex-col items-center gap-1 text-base-content/50 transition-colors"
+      class="flex flex-col items-center gap-1 text-base-content/50 transition-colors md:flex-row md:gap-3 md:w-full md:px-3 md:py-2 md:rounded-xl md:hover:bg-base-200"
     >
       <ng-icon [name]="item.icon" class="text-2xl" />
-      <span class="text-[11px] md:hidden">{{ item.label }}</span>
+      <span class="text-[11px] md:text-sm md:font-medium">{{ item.label }}</span>
     </a>
   }
 </nav>
