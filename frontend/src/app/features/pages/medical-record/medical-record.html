@@ -1,5 +1,8 @@
-<!-- pages/pet-history/pet-history.component.html -->
 <section class="px-5 pt-6 pb-10 flex flex-col gap-6 max-w-lg mx-auto">
+  <a routerLink="/pets" class="text-sm text-base-content/50 flex items-center gap-1 w-fit">
+    ← Volver a mascotas
+  </a>
+
   @if (pet(); as p) {
     <div class="flex items-center gap-4">
       <div class="avatar">

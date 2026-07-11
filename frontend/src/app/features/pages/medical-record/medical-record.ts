@@ -1,6 +1,6 @@
-// pages/pet-history/pet-history.component.ts
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { DatePipe } from '@angular/common';
 import { AppointmentResponse } from '../../interfaces/entities/appointment.interface';
 import { MedicalRecordResponse } from '../../interfaces/entities/medical-record.interface';
 import { PetService } from '../../services/pet.service';
@@ -15,6 +15,7 @@ type TimelineEntry =
 @Component({
   selector: 'app-medical-record',
   standalone: true,
+  imports: [DatePipe, RouterLink],
   templateUrl: './medical-record.html',
 })
 export class PetHistoryComponent implements OnInit {
@@ -54,12 +55,12 @@ export class PetHistoryComponent implements OnInit {
     });
 
     this.appointmentService.getAppointmentsByPet(petId).subscribe({
-      next: (res) => this.appointments.set(res.data),
+      next: (res) => this.appointments.set(res.data ?? []),
     });
 
     this.medicalRecordService.getMedicalRecordsByPet(petId).subscribe({
       next: (res) => {
-        this.medicalRecords.set(res.data);
+        this.medicalRecords.set(res.data ?? []);
         this.isLoading.set(false);
       },
       error: () => {
