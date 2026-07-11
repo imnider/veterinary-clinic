@@ -2,8 +2,7 @@ USE db_veterinary_clinic;
 GO
 
 -- 1. Ver todas las citas de una mascota
-
-DECLARE @pet_id INT = 2; --id mascota a buscar
+DECLARE @pet_id INT = 1; --id mascota a buscar
 
 SELECT p.pet_id, p.name AS pet_name, p.species,
     ap.appointment_date, ap.reason, ap.status,
@@ -17,9 +16,7 @@ WHERE p.pet_id = @pet_id
 ORDER BY ap.appointment_date DESC;
 GO
 
--- =========================================================
 -- 2. Mostrar últimos 3 tratamientos de una mascota (por cita)
--- =========================================================
 DECLARE @pet_id INT = 2;
 
 SELECT TOP 3
@@ -43,9 +40,7 @@ WHERE mr.pet_id = @pet_id
 ORDER BY mr.record_date DESC;
 GO
 
--- =========================================================
 -- 3. Mostrar servicios realizados a una mascota
--- =========================================================
 DECLARE @pet_id INT = 2;
 
 SELECT p.pet_id, p.name AS pet_name,
@@ -63,9 +58,7 @@ WHERE p.pet_id = @pet_id
 ORDER BY ap.appointment_date DESC;
 GO
 
--- =========================================================
 -- 4. Mostrar historial médico completo de una mascota
--- =========================================================
 DECLARE @pet_id INT = 1;
 
 SELECT p.pet_id, p.name AS pet_name,
@@ -85,9 +78,7 @@ WHERE p.pet_id = @pet_id
 ORDER BY mr.record_date DESC;
 GO
 
--- =========================================================
 -- 5. Mostrar mascotas sin vacunas
--- =========================================================
 SELECT p.pet_id, p.name AS pet_name, p.species, o.name AS owner_name
 FROM pet p
 INNER JOIN app_user o
@@ -100,9 +91,7 @@ WHERE p.deleted_at IS NULL
 ORDER BY p.name;
 GO
 
--- =========================================================
 -- 6. Mostrar todas las vacunas que se han aplicado a una mascota
--- =========================================================
 DECLARE @pet_id INT = 1;
 
 SELECT p.pet_id, p.name AS pet_name,
@@ -120,29 +109,29 @@ WHERE p.pet_id = @pet_id
 ORDER BY vr.application_date DESC;
 GO
 
--- =========================================================
 -- 7. Mostrar mascotas esterilizadas y no esterilizadas
--- =========================================================
 -- 7a. Conteo por estado de esterilización
-SELECT
-    CASE WHEN is_neutered = 1 THEN 'Esterilizado' ELSE 'No esterilizado' END AS sterilization_status,
+SELECT 
+    is_neutered AS sterilization_status, 
     COUNT(*) AS total_pets
 FROM pet
 WHERE deleted_at IS NULL
 GROUP BY is_neutered;
-GO
 
 -- 7b. Detalle de cada mascota con su estado
-SELECT p.pet_id, p.name AS pet_name, p.species,
-    CASE WHEN p.is_neutered = 1 THEN 'Esterilizado' ELSE 'No esterilizado' END AS sterilization_status
-FROM pet p
-WHERE p.deleted_at IS NULL
-ORDER BY p.is_neutered DESC, p.name;
+SELECT pet_id, name AS pet_name, species, 'Esterilizado' AS sterilization_status
+FROM pet
+WHERE deleted_at IS NULL AND is_neutered = 1
+
+UNION ALL
+
+SELECT pet_id, name AS pet_name, species, 'No esterilizado' AS sterilization_status
+FROM pet
+WHERE deleted_at IS NULL AND is_neutered = 0
+ORDER BY sterilization_status DESC, pet_name;
 GO
 
--- =========================================================
 -- 8. Mostrar mascotas con mayor número de citas
--- =========================================================
 SELECT p.pet_id, p.name AS pet_name, COUNT(ap.appointment_id) AS total_appointments
 FROM pet p
 INNER JOIN appointment ap
@@ -159,9 +148,7 @@ HAVING COUNT(ap.appointment_id) = (
 ORDER BY total_appointments DESC;
 GO
 
--- =========================================================
 -- 9. Promedio de citas por veterinario
--- =========================================================
 -- 9a. Promedio general de citas por veterinario
 SELECT AVG(cnt * 1.0) AS avg_appointments_per_vet
 FROM (
@@ -188,9 +175,7 @@ HAVING COUNT(ap.appointment_id) > (
 ORDER BY total_appointments DESC;
 GO
 
--- =========================================================
 -- 10. Citas realizadas por cada propietario
--- =========================================================
 SELECT o.user_id AS owner_id, o.name AS owner_name,
     COUNT(ap.appointment_id) AS total_appointments
 FROM app_user o
@@ -202,10 +187,7 @@ GROUP BY o.user_id, o.name
 ORDER BY total_appointments DESC;
 GO
 
--- =========================================================
--- BONUS 11. Peso mínimo, máximo y promedio registrado por mascota
--- (útil para seguimiento de salud/nutrición)
--- =========================================================
+-- 11. Peso mínimo, máximo y promedio registrado por mascota
 SELECT p.pet_id, p.name AS pet_name,
     MIN(mr.recorded_weight) AS min_weight,
     MAX(mr.recorded_weight) AS max_weight,
@@ -220,9 +202,8 @@ HAVING COUNT(mr.medical_record_id) > 1
 ORDER BY p.name;
 GO
 
--- =========================================================
--- BONUS 12. Mascotas con vacunas próximas a vencer (próximos 30 días)
--- =========================================================
+-- extra:
+-- 12. Mascotas con vacunas próximas a vencer (próximos 30 días)
 SELECT p.pet_id, p.name AS pet_name, o.name AS owner_name,
     v.name AS vaccine_name, vr.next_dose_date
 FROM vaccination_record vr
