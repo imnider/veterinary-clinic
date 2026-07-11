@@ -1,0 +1,35 @@
+<section class="px-5 pt-2 pb-10 flex flex-col gap-5">
+  <h1 class="text-xl font-semibold text-base-content">Registros médicos</h1>
+
+  @if (loading()) {
+    <div class="flex justify-center py-10">
+      <span class="loading loading-spinner loading-lg"></span>
+    </div>
+  } @else if (errorMessage()) {
+    <p class="text-sm text-error">{{ errorMessage() }}</p>
+  } @else {
+    <div class="flex flex-col gap-3">
+      @for (record of records(); track record.id) {
+        <a
+          [routerLink]="['/pets', record.petId, 'history']"
+          class="card bg-base-100 rounded-3xl shadow-sm border border-base-200 hover:shadow-md transition-shadow"
+        >
+          <div class="card-body gap-1 p-4">
+            <p class="font-medium text-base-content">{{ record.diagnosis }}</p>
+            @if (record.notes) {
+              <p class="text-sm text-base-content/60">{{ record.notes }}</p>
+            }
+            <div class="flex justify-between items-center mt-1">
+              <p class="text-xs text-base-content/40">Dr(a). {{ record.veterinarianName }}</p>
+              <p class="text-xs text-base-content/40">
+                {{ record.recordDate | date: 'medium' }}
+              </p>
+            </div>
+          </div>
+        </a>
+      } @empty {
+        <p class="text-sm text-base-content/50">No hay registros médicos aún.</p>
+      }
+    </div>
+  }
+</section>

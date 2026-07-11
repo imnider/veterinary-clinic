@@ -3,6 +3,12 @@
     <div>
       <p class="font-medium text-base-content">{{ appointment.petName }}</p>
       <p class="text-sm text-base-content/60">{{ appointment.reason }}</p>
+      <span
+        class="badge badge-sm rounded-full mt-1"
+        [class]="getStatusOption(appointment.status)?.badgeClass ?? 'badge-outline'"
+      >
+        {{ getStatusOption(appointment.status)?.label ?? appointment.status }}
+      </span>
     </div>
     <div class="text-right">
       <p class="text-sm font-medium text-secondary">

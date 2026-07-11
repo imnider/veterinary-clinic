@@ -1,66 +1,101 @@
 <section class="px-5 pt-6 pb-10 flex flex-col gap-6 max-w-md mx-auto">
-  <h1 class="text-xl font-semibold text-base-content">Agendar cita</h1>
+  <div class="flex items-center gap-2">
+    <a routerLink="/appointments" class="btn btn-ghost btn-sm btn-circle">
+      <ng-icon name="heroChevronLeft" />
+    </a>
+    <h1 class="text-xl font-semibold text-base-content">Agendar cita</h1>
+  </div>
 
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
-    <label class="form-control">
-      <span class="label-text text-base-content/70 mb-1">Mascota</span>
-      <select formControlName="petId" class="select select-bordered rounded-full w-full">
-        <option [ngValue]="null" disabled selected>Selecciona tu mascota</option>
-        @for (pet of myPets(); track pet.id) {
-          <option [ngValue]="pet.id">{{ pet.name }}</option>
+  @if (isLoadingPets()) {
+    <div class="flex justify-center py-10">
+      <span class="loading loading-spinner loading-lg"></span>
+    </div>
+  } @else if (myPets().length === 0) {
+    <div class="alert rounded-2xl text-sm flex flex-col items-start gap-2">
+      <span>Todavía no tienes mascotas registradas.</span>
+      <a routerLink="/pets/register" class="btn btn-primary btn-sm rounded-full">
+        Registrar mascota
+      </a>
+    </div>
+  } @else {
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+      <label class="form-control">
+        <span class="label-text text-base-content/70 mb-1">Mascota</span>
+        <select formControlName="petId" class="select select-bordered rounded-full w-full">
+          <option [ngValue]="null" disabled selected>Selecciona tu mascota</option>
+          @for (pet of myPets(); track pet.id) {
+            <option [ngValue]="pet.id">{{ pet.name }}</option>
+          }
+        </select>
+        @if (form.controls.petId.invalid && form.controls.petId.touched) {
+          <span class="text-error text-xs mt-1 ml-3">Selecciona una mascota.</span>
         }
-      </select>
-    </label>
+      </label>
 
-    <label class="form-control">
-      <span class="label-text text-base-content/70 mb-1">Veterinario</span>
-      <select formControlName="veterinarianId" class="select select-bordered rounded-full w-full">
-        <option [ngValue]="null" disabled selected>Selecciona un veterinario</option>
-        @for (vet of veterinarians(); track vet.id) {
-          <option [ngValue]="vet.id">{{ vet.firstName }} {{ vet.lastName }}</option>
+      <label class="form-control">
+        <span class="label-text text-base-content/70 mb-1">Veterinario</span>
+        <select formControlName="veterinarianId" class="select select-bordered rounded-full w-full">
+          <option [ngValue]="null" disabled selected>Selecciona un veterinario</option>
+          @for (vet of veterinarians; track vet.id) {
+            <option [ngValue]="vet.id">{{ vet.name }}</option>
+          }
+        </select>
+        @if (form.controls.veterinarianId.invalid && form.controls.veterinarianId.touched) {
+          <span class="text-error text-xs mt-1 ml-3">Selecciona un veterinario.</span>
         }
-      </select>
-    </label>
+      </label>
 
-    <label class="form-control">
-      <span class="label-text text-base-content/70 mb-1">Fecha y hora</span>
-      <input
-        formControlName="appointmentDate"
-        type="datetime-local"
-        class="input input-bordered rounded-full w-full"
-      />
-    </label>
+      <label class="form-control">
+        <span class="label-text text-base-content/70 mb-1">Fecha y hora</span>
+        <input
+          formControlName="appointmentDate"
+          type="datetime-local"
+          class="input input-bordered rounded-full w-full"
+        />
+        @if (form.controls.appointmentDate.invalid && form.controls.appointmentDate.touched) {
+          <span class="text-error text-xs mt-1 ml-3">Selecciona la fecha y hora.</span>
+        }
+      </label>
 
-    <label class="form-control">
-      <span class="label-text text-base-content/70 mb-1">Tipo de cita</span>
-      <select formControlName="appointmentType" class="select select-bordered rounded-full w-full">
-        <option value="" disabled selected>Selecciona un tipo</option>
-        <option value="CONSULTA">Consulta general</option>
-        <option value="VACUNACION">Vacunación</option>
-        <option value="CIRUGIA">Cirugía</option>
-        <option value="EMERGENCIA">Emergencia</option>
-      </select>
-    </label>
+      <label class="form-control">
+        <span class="label-text text-base-content/70 mb-1">Tipo de cita</span>
+        <select
+          formControlName="appointmentType"
+          class="select select-bordered rounded-full w-full"
+        >
+          <option value="" disabled selected>Selecciona un tipo</option>
+          @for (type of appointmentTypes; track type.value) {
+            <option [value]="type.value">{{ type.label }}</option>
+          }
+        </select>
+        @if (form.controls.appointmentType.invalid && form.controls.appointmentType.touched) {
+          <span class="text-error text-xs mt-1 ml-3">Selecciona un tipo de cita.</span>
+        }
+      </label>
 
-    <label class="form-control">
-      <span class="label-text text-base-content/70 mb-1">Motivo</span>
-      <textarea
-        formControlName="reason"
-        rows="3"
-        placeholder="Describe brevemente el motivo"
-        class="textarea textarea-bordered rounded-2xl w-full"
-      ></textarea>
-    </label>
+      <label class="form-control">
+        <span class="label-text text-base-content/70 mb-1">Motivo</span>
+        <textarea
+          formControlName="reason"
+          rows="3"
+          placeholder="Describe brevemente el motivo"
+          class="textarea textarea-bordered rounded-2xl w-full"
+        ></textarea>
+        @if (form.controls.reason.invalid && form.controls.reason.touched) {
+          <span class="text-error text-xs mt-1 ml-3">Describe el motivo de la cita.</span>
+        }
+      </label>
 
-    @if (errorMessage()) {
-      <div class="alert alert-error rounded-2xl text-sm">{{ errorMessage() }}</div>
-    }
-
-    <button type="submit" class="btn btn-primary rounded-full mt-2" [disabled]="isSubmitting()">
-      @if (isSubmitting()) {
-        <span class="loading loading-spinner loading-sm"></span>
+      @if (errorMessage()) {
+        <div class="alert alert-error rounded-2xl text-sm">{{ errorMessage() }}</div>
       }
-      Confirmar cita
-    </button>
-  </form>
+
+      <button type="submit" class="btn btn-primary rounded-full mt-2" [disabled]="isSubmitting()">
+        @if (isSubmitting()) {
+          <span class="loading loading-spinner loading-sm"></span>
+        }
+        Confirmar cita
+      </button>
+    </form>
+  }
 </section>

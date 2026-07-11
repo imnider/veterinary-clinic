@@ -1,0 +1,112 @@
+<section class="px-5 pt-2 pb-10 flex flex-col gap-5">
+  <div class="flex items-center justify-between gap-3 flex-wrap">
+    <h1 class="text-xl font-semibold text-base-content">Citas</h1>
+    @if (!isStaff()) {
+      <a routerLink="/appointments/create" class="btn btn-primary btn-sm rounded-full gap-1">
+        <ng-icon name="heroPlus" />
+        Agendar cita
+      </a>
+    }
+  </div>
+
+  <div class="tabs tabs-boxed bg-base-100 w-fit rounded-full">
+    <button
+      type="button"
+      class="tab rounded-full"
+      [class.tab-active]="filter() === 'pending'"
+      (click)="setFilter('pending')"
+    >
+      Pendientes
+    </button>
+    <button
+      type="button"
+      class="tab rounded-full"
+      [class.tab-active]="filter() === 'all'"
+      (click)="setFilter('all')"
+    >
+      Todas
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="flex justify-center py-10">
+      <span class="loading loading-spinner loading-lg"></span>
+    </div>
+  } @else if (errorMessage()) {
+    <p class="text-sm text-error">{{ errorMessage() }}</p>
+  } @else {
+    <div class="flex flex-col gap-3">
+      @for (appt of sortedAppointments(); track appt.id) {
+        <div class="card bg-base-100 rounded-3xl shadow-sm border border-base-200">
+          <div class="card-body gap-2 p-4">
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p class="font-medium text-base-content">
+                  {{ appt.petName }} · {{ getAppointmentTypeLabel(appt.appointmentType) }}
+                </p>
+                <p class="text-sm text-base-content/60">{{ appt.reason }}</p>
+                <p class="text-xs text-base-content/40 mt-1">Dr(a). {{ appt.veterinarianName }}</p>
+              </div>
+              <span
+                class="badge rounded-full"
+                [class]="getStatusOption(appt.status)?.badgeClass ?? 'badge-outline'"
+              >
+                {{ getStatusOption(appt.status)?.label ?? appt.status }}
+              </span>
+            </div>
+
+            <p class="text-xs text-base-content/40">
+              {{ appt.appointmentDate | date: 'medium' }}
+            </p>
+
+            @if (isStaff()) {
+              <div class="flex flex-wrap gap-2 mt-2">
+                @if (appt.status === 'PENDIENTE') {
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-outline btn-info rounded-full gap-1"
+                    [disabled]="updatingId() === appt.id"
+                    (click)="changeStatus(appt, 'CONFIRMADA')"
+                  >
+                    <ng-icon name="heroCheck" />
+                    Confirmar
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-outline btn-error rounded-full gap-1"
+                    [disabled]="updatingId() === appt.id"
+                    (click)="changeStatus(appt, 'CANCELADA')"
+                  >
+                    <ng-icon name="heroXCircle" />
+                    Cancelar
+                  </button>
+                }
+                @if (appt.status === 'CONFIRMADA') {
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-primary rounded-full gap-1"
+                    (click)="goToRecord(appt)"
+                  >
+                    <ng-icon name="heroPencilSquare" />
+                    Registrar atención
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-outline btn-error rounded-full gap-1"
+                    [disabled]="updatingId() === appt.id"
+                    (click)="changeStatus(appt, 'CANCELADA')"
+                  >
+                    <ng-icon name="heroXCircle" />
+                    Cancelar
+                  </button>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      } @empty {
+        <p class="text-sm text-base-content/50">No hay citas para mostrar.</p>
+      }
+    </div>
+  }
+</section>

@@ -1,64 +1,84 @@
-// import { Component, OnInit, inject, signal } from '@angular/core';
-// import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-// import { Router } from '@angular/router';
-// import { PetService } from '../../../services/pet.service';
-// import { PetResponse } from '../../../interfaces/entities/pet.interface';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
+import { NgIcon } from '@ng-icons/core';
+import { PetService } from '../../../services/pet.service';
+import { AppointmentService } from '../../../services/appointment.service';
+import { PetResponse } from '../../../interfaces/entities/pet.interface';
+import { CreateAppointmentRequest } from '../../../interfaces/entities/appointment.interface';
+import {
+  APPOINTMENT_TYPES,
+  VETERINARIANS,
+} from '../../../../shared/constants/appointment.constants';
 
-// @Component({
-//   selector: 'app-appointment-create',
-//   standalone: true,
-//   imports: [ReactiveFormsModule],
-//   templateUrl: './appointment-create.html',
-// })
-// export class AppointmentCreateComponent implements OnInit {
-//   private fb = inject(FormBuilder);
-//   private petService = inject(PetService);
-//   private appUserService = inject(UserService);
-//   private appointmentService = inject(AppointmentService);
-//   private router = inject(Router);
+@Component({
+  selector: 'app-appointment-create',
+  standalone: true,
+  imports: [ReactiveFormsModule, NgIcon, RouterLink],
+  templateUrl: './appointment-create.html',
+})
+export class AppointmentCreateComponent implements OnInit {
+  private fb = inject(FormBuilder);
+  private petService = inject(PetService);
+  private appointmentService = inject(AppointmentService);
+  private router = inject(Router);
 
-//   myPets = signal<PetResponse[]>([]);
-//   veterinarians = signal<AppUserResponse[]>([]);
-//   isSubmitting = signal(false);
-//   errorMessage = signal<string | null>(null);
+  readonly appointmentTypes = APPOINTMENT_TYPES;
+  readonly veterinarians = VETERINARIANS;
 
-//   form = this.fb.nonNullable.group({
-//     petId: [null as number | null, Validators.required],
-//     veterinarianId: [null as number | null, Validators.required],
-//     appointmentDate: ['', Validators.required],
-//     appointmentType: ['', Validators.required],
-//     reason: ['', [Validators.required, Validators.maxLength(255)]],
-//   });
+  myPets = signal<PetResponse[]>([]);
+  isLoadingPets = signal(true);
+  isSubmitting = signal(false);
+  errorMessage = signal<string | null>(null);
 
-//   ngOnInit(): void {
-//     this.petService.getMyPets().subscribe({
-//       next: (res) => this.myPets.set(res.data),
-//     });
-//     this.appUserService.getVeterinarians().subscribe({
-//       next: (res) => this.veterinarians.set(res.data),
-//     });
-//   }
+  form = this.fb.nonNullable.group({
+    petId: [null as number | null, Validators.required],
+    veterinarianId: [null as number | null, Validators.required],
+    appointmentDate: ['', Validators.required],
+    appointmentType: ['', Validators.required],
+    reason: ['', [Validators.required, Validators.maxLength(255)]],
+  });
 
-//   onSubmit(): void {
-//     if (this.form.invalid) {
-//       this.form.markAllAsTouched();
-//       return;
-//     }
+  ngOnInit(): void {
+    this.petService.getMyPets().subscribe({
+      next: (res) => {
+        this.myPets.set(res.data ?? []);
+        this.isLoadingPets.set(false);
+      },
+      error: () => {
+        this.isLoadingPets.set(false);
+        this.errorMessage.set('No se pudieron cargar tus mascotas.');
+      },
+    });
+  }
 
-//     this.isSubmitting.set(true);
-//     this.errorMessage.set(null);
+  onSubmit(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
-//     const request = this.form.getRawValue() as CreateAppointmentRequest;
+    this.isSubmitting.set(true);
+    this.errorMessage.set(null);
 
-//     this.appointmentService.createAppointment(request).subscribe({
-//       next: (response) => {
-//         this.isSubmitting.set(false);
-//         this.router.navigate(['/pets', request.petId, 'history']);
-//       },
-//       error: (err) => {
-//         this.isSubmitting.set(false);
-//         this.errorMessage.set(err?.error?.message ?? 'No se pudo agendar la cita.');
-//       },
-//     });
-//   }
-// }
+    const raw = this.form.getRawValue();
+    const request: CreateAppointmentRequest = {
+      petId: raw.petId!,
+      veterinarianId: raw.veterinarianId!,
+      appointmentDate: raw.appointmentDate,
+      appointmentType: raw.appointmentType,
+      reason: raw.reason,
+    };
+
+    this.appointmentService.createAppointment(request).subscribe({
+      next: () => {
+        this.isSubmitting.set(false);
+        this.router.navigate(['/appointments']);
+      },
+      error: (err) => {
+        this.isSubmitting.set(false);
+        this.errorMessage.set(err?.error?.message ?? 'No se pudo agendar la cita.');
+      },
+    });
+  }
+}

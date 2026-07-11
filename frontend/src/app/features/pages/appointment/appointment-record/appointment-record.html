@@ -1,0 +1,58 @@
+<section class="px-5 pt-6 pb-10 flex flex-col gap-6 max-w-md mx-auto">
+  <div class="flex items-center gap-2">
+    <a routerLink="/appointments" class="btn btn-ghost btn-sm btn-circle">
+      <ng-icon name="heroChevronLeft" />
+    </a>
+    <h1 class="text-xl font-semibold text-base-content">Registrar atención</h1>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+    <label class="form-control">
+      <span class="label-text text-base-content/70 mb-1">Diagnóstico</span>
+      <textarea
+        formControlName="diagnosis"
+        rows="3"
+        placeholder="Diagnóstico de la consulta"
+        class="textarea textarea-bordered rounded-2xl w-full"
+      ></textarea>
+      @if (form.controls.diagnosis.invalid && form.controls.diagnosis.touched) {
+        <span class="text-error text-xs mt-1 ml-3">El diagnóstico es obligatorio.</span>
+      }
+    </label>
+
+    <label class="form-control">
+      <span class="label-text text-base-content/70 mb-1">Notas</span>
+      <textarea
+        formControlName="notes"
+        rows="3"
+        placeholder="Notas u observaciones adicionales (opcional)"
+        class="textarea textarea-bordered rounded-2xl w-full"
+      ></textarea>
+    </label>
+
+    <label class="form-control">
+      <span class="label-text text-base-content/70 mb-1">Peso registrado (kg)</span>
+      <input
+        formControlName="recordedWeight"
+        type="number"
+        step="0.1"
+        placeholder="0.0"
+        class="input input-bordered rounded-full w-full"
+      />
+      @if (form.controls.recordedWeight.invalid && form.controls.recordedWeight.touched) {
+        <span class="text-error text-xs mt-1 ml-3">Indica el peso registrado.</span>
+      }
+    </label>
+
+    @if (errorMessage()) {
+      <div class="alert alert-error rounded-2xl text-sm">{{ errorMessage() }}</div>
+    }
+
+    <button type="submit" class="btn btn-primary rounded-full mt-2" [disabled]="isSubmitting()">
+      @if (isSubmitting()) {
+        <span class="loading loading-spinner loading-sm"></span>
+      }
+      Guardar registro
+    </button>
+  </form>
+</section>
