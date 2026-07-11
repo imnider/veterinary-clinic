@@ -7,6 +7,10 @@ import { PetService } from '../../services/pet.service';
 import { AppointmentService } from '../../services/appointment.service';
 import { MedicalRecordService } from '../../services/medical-record.service';
 import { PetResponse } from '../../interfaces/entities/pet.interface';
+import {
+  getAppointmentTypeLabel,
+  getStatusOption,
+} from '../../../shared/constants/appointment.constants';
 
 type TimelineEntry =
   | { type: 'appointment'; date: string; data: AppointmentResponse }
@@ -29,6 +33,9 @@ export class PetHistoryComponent implements OnInit {
   medicalRecords = signal<MedicalRecordResponse[]>([]);
   isLoading = signal(true);
   errorMessage = signal<string | null>(null);
+
+  getAppointmentTypeLabel = getAppointmentTypeLabel;
+  getStatusOption = getStatusOption;
 
   timeline = computed<TimelineEntry[]>(() => {
     const entries: TimelineEntry[] = [
