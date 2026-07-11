@@ -5,11 +5,12 @@ import { PetService } from '../../../services/pet.service';
 import { AuthService } from '../../../services/auth.service';
 import { PetResponse } from '../../../interfaces/entities/pet.interface';
 import { Role } from '../../../../shared/enums/role.enum';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-pet-list',
   standalone: true,
-  imports: [NgIcon, RouterLink],
+  imports: [NgIcon, RouterLink, FormsModule],
   templateUrl: './pet-list.html',
 })
 export class PetListComponent implements OnInit {
@@ -21,10 +22,15 @@ export class PetListComponent implements OnInit {
   loading = signal(false);
   errorMessage = signal<string | null>(null);
 
-  ownerIdQuery = signal<number | null>(null);
-  activeOwnerId = signal<number | null>(null);
+  ownerNameQuery = signal<string>('');
 
   isStaff = computed(() => this.authService.hasAnyRole([Role.VETERINARIO, Role.ADMIN]));
+
+  filteredPets = computed(() => {
+    const query = this.ownerNameQuery().trim().toLowerCase();
+    if (!query) return this.pets();
+    return this.pets().filter((pet) => pet.ownerName.toLowerCase().includes(query));
+  });
 
   ngOnInit(): void {
     this.loadDefaultPets();
@@ -46,39 +52,6 @@ export class PetListComponent implements OnInit {
         this.loading.set(false);
       },
     });
-  }
-
-  onOwnerQueryChange(value: string): void {
-    this.ownerIdQuery.set(value ? Number(value) : null);
-  }
-
-  searchByOwner(): void {
-    const ownerId = this.ownerIdQuery();
-    if (!ownerId) {
-      this.clearOwnerFilter();
-      return;
-    }
-
-    this.activeOwnerId.set(ownerId);
-    this.loading.set(true);
-    this.errorMessage.set(null);
-
-    this.petService.getPetsByOwner(ownerId).subscribe({
-      next: (res) => {
-        this.pets.set(res.data ?? []);
-        this.loading.set(false);
-      },
-      error: () => {
-        this.errorMessage.set('No se pudieron cargar las mascotas de este dueño.');
-        this.loading.set(false);
-      },
-    });
-  }
-
-  clearOwnerFilter(): void {
-    this.activeOwnerId.set(null);
-    this.ownerIdQuery.set(null);
-    this.loadDefaultPets();
   }
 
   goToDetail(pet: PetResponse): void {

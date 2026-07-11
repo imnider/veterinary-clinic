@@ -14,26 +14,13 @@
       <label class="input input-bordered rounded-full flex items-center gap-2 bg-base-100">
         <ng-icon name="heroMagnifyingGlass" class="text-base-content/40" />
         <input
-          type="number"
+          type="text"
           class="grow"
-          placeholder="Buscar mascotas por ID de dueño"
-          [value]="ownerIdQuery()"
-          (input)="onOwnerQueryChange($any($event.target).value)"
-          (keyup.enter)="searchByOwner()"
+          placeholder="Buscar por nombre del dueño"
+          [ngModel]="ownerNameQuery()"
+          (ngModelChange)="ownerNameQuery.set($event)"
         />
-        <button type="button" class="btn btn-ghost btn-sm btn-circle" (click)="searchByOwner()">
-          <ng-icon name="heroArrowLeft" class="rotate-180" />
-        </button>
       </label>
-
-      @if (activeOwnerId()) {
-        <div class="flex items-center gap-2">
-          <span class="badge badge-primary badge-lg">Dueño #{{ activeOwnerId() }}</span>
-          <button type="button" class="btn btn-ghost btn-xs" (click)="clearOwnerFilter()">
-            Quitar filtro
-          </button>
-        </div>
-      }
     </div>
   }
 
@@ -45,7 +32,7 @@
     <p class="text-sm text-error">{{ errorMessage() }}</p>
   } @else {
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      @for (pet of pets(); track pet.id) {
+      @for (pet of filteredPets(); track pet.id) {
         @if (isStaff()) {
           <!-- Vista administrativa: sin imagen -->
           <div
