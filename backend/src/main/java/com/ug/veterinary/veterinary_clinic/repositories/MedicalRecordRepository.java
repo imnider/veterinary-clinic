@@ -11,4 +11,6 @@ public interface MedicalRecordRepository extends JpaRepository<MedicalRecord, In
     Optional<MedicalRecord> findByAppointmentId(Integer appointmentId);
     List<MedicalRecord> findByPetIdOrderByRecordDateDesc(Integer petId);
     boolean existsByAppointmentId(Integer appointmentId);
+    List<MedicalRecord> findByVeterinarianId(Integer veterinarianId);
+    List<MedicalRecord> findByPetOwnerId(Integer ownerId);
 }

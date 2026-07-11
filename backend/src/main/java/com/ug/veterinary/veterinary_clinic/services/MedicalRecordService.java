@@ -80,10 +80,26 @@ public class MedicalRecordService {
 
     @Transactional(readOnly = true)
     public List<MedicalRecordResponse> getAllMedicalRecords() {
-        return medicalRecordRepository.findAll()
-                .stream()
-                .map(MedicalRecordResponse::from)
-                .toList();
+        AppUser currentUser = SecurityUtils.getCurrentUser().getAppUser();
+
+        if (currentUser.getRoles().stream().anyMatch(r -> r.getName() == RoleEnum.ADMIN)) {
+            return medicalRecordRepository.findAll()
+                    .stream()
+                    .map(MedicalRecordResponse::from)
+                    .toList();
+
+        } else if (currentUser.getRoles().stream().anyMatch(r -> r.getName() == RoleEnum.VETERINARIO)) {
+            return medicalRecordRepository.findByVeterinarianId(currentUser.getId())
+                    .stream()
+                    .map(MedicalRecordResponse::from)
+                    .toList();
+
+        } else {
+            return medicalRecordRepository.findByPetOwnerId(currentUser.getId())
+                    .stream()
+                    .map(MedicalRecordResponse::from)
+                    .toList();
+        }
     }
 
     private void validateMedicalRecordAccess(Pet pet) {

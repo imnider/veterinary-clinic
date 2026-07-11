@@ -16,16 +16,20 @@ public enum RoleEnum {
             Permission.APPOINTMENT_READ,
             Permission.APPOINTMENT_UPDATE,
             Permission.MEDICAL_RECORD_READ,
-            Permission.VACCINATION_READ
+            Permission.MEDICAL_RECORD_READ_ALL,
+            Permission.VACCINATION_READ,
+            Permission.USER_READ_ALL
     )),
 
     VETERINARIO(Set.of(
             Permission.PET_READ,
+            Permission.PET_READ_ALL,
             Permission.APPOINTMENT_READ,
             Permission.APPOINTMENT_READ_ALL,
             Permission.APPOINTMENT_UPDATE,
             Permission.MEDICAL_RECORD_CREATE,
             Permission.MEDICAL_RECORD_READ,
+            Permission.MEDICAL_RECORD_READ_ALL,
             Permission.MEDICAL_RECORD_UPDATE,
             Permission.VACCINATION_CREATE,
             Permission.VACCINATION_READ,
@@ -103,6 +107,7 @@ public enum RoleEnum {
         // User
         USER_CREATE,
         USER_READ,
+        USER_READ_ALL,
         USER_UPDATE,
         USER_DELETE
     }
