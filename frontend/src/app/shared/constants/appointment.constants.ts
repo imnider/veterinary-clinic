@@ -18,10 +18,9 @@ export interface AppointmentStatusOption extends SelectOption {
 }
 
 export const APPOINTMENT_STATUSES: AppointmentStatusOption[] = [
-  { value: 'PENDIENTE', label: 'Pendiente', badgeClass: 'badge-warning' },
-  { value: 'CONFIRMADA', label: 'Confirmada', badgeClass: 'badge-info' },
-  { value: 'ATENDIDA', label: 'Atendida', badgeClass: 'badge-success' },
-  { value: 'CANCELADA', label: 'Cancelada', badgeClass: 'badge-error' },
+  { value: 'SCHEDULED', label: 'Pendiente', badgeClass: 'badge-warning' },
+  { value: 'COMPLETED', label: 'Atendida', badgeClass: 'badge-success' },
+  { value: 'CANCELLED', label: 'Cancelada', badgeClass: 'badge-error' },
 ];
 
 export function getAppointmentTypeLabel(value: string): string {
