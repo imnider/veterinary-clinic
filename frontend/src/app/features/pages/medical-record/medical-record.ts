@@ -8,7 +8,7 @@ import { AppointmentService } from '../../services/appointment.service';
 import { MedicalRecordService } from '../../services/medical-record.service';
 import { PetResponse } from '../../interfaces/entities/pet.interface';
 import {
-  APPOINTMENT_STATUSES,
+  getAppointmentTypeLabel,
   getStatusOption,
 } from '../../../shared/constants/appointment.constants';
 
@@ -28,14 +28,14 @@ export class PetHistoryComponent implements OnInit {
   private appointmentService = inject(AppointmentService);
   private medicalRecordService = inject(MedicalRecordService);
 
-  readonly getStatusOption = getStatusOption;
-  readonly statuses = APPOINTMENT_STATUSES;
-
   pet = signal<PetResponse | null>(null);
   appointments = signal<AppointmentResponse[]>([]);
   medicalRecords = signal<MedicalRecordResponse[]>([]);
   isLoading = signal(true);
   errorMessage = signal<string | null>(null);
+
+  getAppointmentTypeLabel = getAppointmentTypeLabel;
+  getStatusOption = getStatusOption;
 
   timeline = computed<TimelineEntry[]>(() => {
     const entries: TimelineEntry[] = [

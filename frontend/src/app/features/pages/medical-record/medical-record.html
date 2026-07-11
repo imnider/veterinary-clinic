@@ -34,7 +34,9 @@
           @if (entry.type === 'appointment') {
             <div class="flex justify-between items-start">
               <div>
-                <p class="font-medium text-base-content">Cita · {{ entry.data.appointmentType }}</p>
+                <p class="font-medium text-base-content">
+                  Cita · {{ getAppointmentTypeLabel(entry.data.appointmentType) }}
+                </p>
                 <p class="text-sm text-base-content/60">{{ entry.data.reason }}</p>
                 <p class="text-xs text-base-content/40 mt-1">
                   Dr(a). {{ entry.data.veterinarianName }}
