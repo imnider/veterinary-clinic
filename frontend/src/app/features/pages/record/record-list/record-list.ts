@@ -1,17 +1,22 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MedicalRecordService } from '../../../services/medical-record.service';
 import { MedicalRecordResponse } from '../../../interfaces/entities/medical-record.interface';
+import { AuthService } from '../../../services/auth.service';
+import { Role } from '../../../../shared/enums/role.enum';
+import { NgIcon } from '@ng-icons/core';
 
 @Component({
   selector: 'app-record-list',
   standalone: true,
-  imports: [DatePipe, RouterLink],
+  imports: [DatePipe, RouterLink, NgIcon],
   templateUrl: './record-list.html',
 })
 export class RecordListComponent implements OnInit {
   private medicalRecordService = inject(MedicalRecordService);
+  private authService = inject(AuthService);
+  isAdmin = computed(() => this.authService.hasAnyRole([Role.ADMIN]));
 
   records = signal<MedicalRecordResponse[]>([]);
   loading = signal(false);

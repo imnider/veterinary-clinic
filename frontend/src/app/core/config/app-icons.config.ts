@@ -20,6 +20,7 @@ import {
   heroPencilSquare,
   heroExclamationTriangle,
   heroArrowLeft,
+  heroTrophy,
 } from '@ng-icons/heroicons/outline';
 
 export const appIcons = {
@@ -44,4 +45,5 @@ export const appIcons = {
   heroPencilSquare,
   heroExclamationTriangle,
   heroArrowLeft,
+  heroTrophy,
 };

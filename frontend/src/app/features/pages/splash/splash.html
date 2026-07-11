@@ -1,12 +1,27 @@
 <div
-  class="min-h-screen flex flex-col items-center justify-center gap-6 bg-gradient-to-b from-sky-200 via-emerald-100 to-lime-100"
+  class="relative min-h-screen overflow-hidden flex items-center justify-center bg-gradient-to-b from-sky-200 via-cyan-100 to-emerald-100"
 >
-  <div
-    class="w-32 h-32 rounded-full bg-white/60 shadow-lg flex items-center justify-center animate-pulse"
-  >
-    <!-- reemplaza por el logo real de la clínica -->
-    <span class="text-4xl">🐾</span>
+  <img
+    src="/assets/icons/splash.jpg"
+    alt="Splash"
+    class="absolute inset-0 w-full h-full object-cover select-none"
+    draggable="false"
+  />
+  <div class="absolute inset-0 bg-black/15"></div>
+
+  <div class="relative z-10 flex flex-col items-center justify-start w-full h-full">
+    <div class="mt-[8vh] md:mt-[10vh] text-center px-6">
+      <h1
+        class="text-4xl md:text-6xl font-bold text-white drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)]"
+      >
+        Clínica veterinaria
+      </h1>
+
+      <p
+        class="mt-3 text-lg md:text-2xl font-medium text-white drop-shadow-[0_3px_8px_rgba(0,0,0,0.8)]"
+      >
+        Cuidando a quienes te acompañan
+      </p>
+    </div>
   </div>
-  <h1 class="text-2xl font-semibold text-emerald-900 tracking-wide">VetClinic</h1>
-  <p class="text-emerald-800/70 text-sm">Cuidando a quienes te acompañan</p>
 </div>

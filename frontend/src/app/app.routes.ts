@@ -80,6 +80,11 @@ export const routes: Routes = [
             (m) => m.RecordListComponent,
           ),
       },
+      {
+        path: 'admin/top-pets',
+        loadComponent: () =>
+          import('./features/pages/admin/top-pets/top-pets').then((m) => m.TopPetsComponent),
+      },
     ],
   },
   {
